@@ -3,12 +3,17 @@ package br.com.inarigames.main;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
+
+import br.com.inarigames.entities.Entity;
+import br.com.inarigames.entities.Player;
+import br.com.inarigames.graphics.Spritesheet;
 
 public class Game extends Canvas implements Runnable{
 	
@@ -22,10 +27,18 @@ public class Game extends Canvas implements Runnable{
 	
 	private BufferedImage image;
 	
+	public List<Entity> entities;
+	public Spritesheet spritesheet;
+	
 	public Game() {
 		setPreferredSize(new Dimension(GAME_WIDTH*GAME_SCALE,GAME_HEIGHT*GAME_SCALE));
 		initFrame();
 		image = new BufferedImage(GAME_WIDTH,GAME_HEIGHT,BufferedImage.TYPE_INT_RGB);
+		entities = new ArrayList<Entity>();
+		spritesheet = new Spritesheet("/spritesheet.png");
+		
+		Player player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
+		entities.add(player);
 	}
 	
 	public void initFrame() {
@@ -54,7 +67,9 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	public void update() {
-		
+		for (Entity entity : entities) {
+			entity.update();
+		}
 	}
 	
 	public void render() {
@@ -68,12 +83,9 @@ public class Game extends Canvas implements Runnable{
 		graphics.setColor(new Color(0,0,0));
 		graphics.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 		
-
-//		graphics.setColor(Color.RED);
-//		graphics.fillOval(20, 25, 40, 40);
-		graphics.setFont(new Font("Arial", Font.BOLD, 20));
-		graphics.setColor(Color.WHITE);
-		graphics.drawString("Ola Luis", 90, 90);
+		for (Entity entity : entities) {
+			entity.render(graphics);
+		}
 		
 		graphics.dispose();
 		graphics = bs.getDrawGraphics();
