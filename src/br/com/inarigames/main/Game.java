@@ -4,6 +4,8 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import br.com.inarigames.entities.Entity;
 import br.com.inarigames.entities.Player;
 import br.com.inarigames.graphics.Spritesheet;
 
-public class Game extends Canvas implements Runnable{
+public class Game extends Canvas implements Runnable, KeyListener{
 	
 	public static JFrame frame;
 	private Thread thread;
@@ -27,17 +29,19 @@ public class Game extends Canvas implements Runnable{
 	
 	private BufferedImage image;
 	
+	private Player player;
 	public List<Entity> entities;
 	public Spritesheet spritesheet;
 	
 	public Game() {
+		addKeyListener(this);
 		setPreferredSize(new Dimension(GAME_WIDTH*GAME_SCALE,GAME_HEIGHT*GAME_SCALE));
 		initFrame();
 		image = new BufferedImage(GAME_WIDTH,GAME_HEIGHT,BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
 		spritesheet = new Spritesheet("/spritesheet.png");
 		
-		Player player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
+		player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
 		entities.add(player);
 	}
 	
@@ -128,5 +132,50 @@ public class Game extends Canvas implements Runnable{
 		
 		stop();
 		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
+				e.getKeyCode() == KeyEvent.VK_D)  {
+			player.setRight(true);
+		} else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
+				e.getKeyCode() == KeyEvent.VK_A) {
+			player.setLeft(true);
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_UP ||
+				e.getKeyCode() == KeyEvent.VK_W)  {
+			player.setUp(true);
+		} else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
+				e.getKeyCode() == KeyEvent.VK_S) {
+			player.setDown(true);
+		}
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
+				e.getKeyCode() == KeyEvent.VK_D)  {
+			player.setRight(false);
+		} else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
+				e.getKeyCode() == KeyEvent.VK_A) {
+			player.setLeft(false);
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_UP ||
+				e.getKeyCode() == KeyEvent.VK_W)  {
+			player.setUp(false);
+		} else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
+				e.getKeyCode() == KeyEvent.VK_S) {
+			player.setDown(false);
+		}		
 	}
 }
