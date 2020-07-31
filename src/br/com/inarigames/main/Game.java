@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import br.com.inarigames.entities.Entity;
 import br.com.inarigames.entities.Player;
 import br.com.inarigames.graphics.Spritesheet;
+import br.com.inarigames.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener{
 	
@@ -29,6 +30,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	private BufferedImage image;
 	
+	public static World world;
+	
 	private Player player;
 	public List<Entity> entities;
 	public static Spritesheet spritesheet;
@@ -37,6 +40,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		addKeyListener(this);
 		setPreferredSize(new Dimension(GAME_WIDTH*GAME_SCALE,GAME_HEIGHT*GAME_SCALE));
 		initFrame();
+		
+		world = new World("/map.png");
 		image = new BufferedImage(GAME_WIDTH,GAME_HEIGHT,BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
 		spritesheet = new Spritesheet("/spritesheet.png");
