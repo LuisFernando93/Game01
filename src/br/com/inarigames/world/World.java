@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class World {
 	
-	private Tile[] tiles;
+	private Tile[][] tiles;
 	public static int WIDTH, HEIGHT;
 	
 
@@ -19,30 +19,30 @@ public class World {
 			WIDTH = map.getWidth();
 			HEIGHT = map.getHeight();
 			int[] pixels = new int[WIDTH * HEIGHT];
-			tiles = new Tile[WIDTH * HEIGHT];
-			map.getRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, map.getWidth());
+			tiles = new Tile[WIDTH][HEIGHT];
+			map.getRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, WIDTH);
 			for (int i = 0; i < WIDTH; i++) {
 				for (int j = 0; j < HEIGHT; j++) {
-					int pixelAtual = pixels[i + (j*map.getWidth())];
+					int pixelAtual = pixels[i + (j*WIDTH)];
 					switch (pixelAtual) {
 						case 0xFF000000:
 							//preto - floor
-							tiles[i + (j * WIDTH)] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
+							tiles[i][j] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
 							break;
 					
 						case 0xFFFFFFFF:
 							//branco - wall
-							tiles[i + (j * WIDTH)] = new FloorTile(i*16, j*16, Tile.TILE_WALL);
+							tiles[i][j] = new FloorTile(i*16, j*16, Tile.TILE_WALL);
 							break;
 							
 						case 0xFF0000FF:
 							//azul - player
-							tiles[i + (j * WIDTH)] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
+							tiles[i][j] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
 							break;
 							
 						default:
 							//padrao - floor
-							tiles[i + (j * WIDTH)] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
+							tiles[i][j] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
 							break;
 							
 					}
@@ -59,7 +59,7 @@ public class World {
 	public void render(Graphics graphics) {
 		for (int i = 0; i < WIDTH; i++) {
 			for(int j = 0; j < HEIGHT; j++) {
-				Tile tile = tiles[i + (j*WIDTH)];
+				Tile tile = tiles[i][j];
 				tile.render(graphics);
 			}
 		}
