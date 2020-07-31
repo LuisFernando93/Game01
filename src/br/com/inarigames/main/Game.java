@@ -34,17 +34,16 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	private Player player;
 	public List<Entity> entities;
-	public static Spritesheet spritesheet;
+	public static Spritesheet spritesheet =  new Spritesheet("/spritesheet.png");
 	
 	public Game() {
 		addKeyListener(this);
 		setPreferredSize(new Dimension(GAME_WIDTH*GAME_SCALE,GAME_HEIGHT*GAME_SCALE));
 		initFrame();
 		
-		world = new World("/map.png");
 		image = new BufferedImage(GAME_WIDTH,GAME_HEIGHT,BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
-		spritesheet = new Spritesheet("/spritesheet.png");
+		world = new World("/map.png");
 		
 		player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
 		entities.add(player);
@@ -92,6 +91,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		graphics.setColor(new Color(0,0,0));
 		graphics.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 		
+		world.render(graphics);
 		for (Entity entity : entities) {
 			entity.render(graphics);
 		}
