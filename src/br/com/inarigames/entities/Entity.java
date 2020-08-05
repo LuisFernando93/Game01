@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import br.com.inarigames.main.Game;
+import br.com.inarigames.world.Camera;
 
 public class Entity {
 
@@ -27,7 +28,7 @@ public class Entity {
 	}
 	
 	public void render(Graphics graphics) {
-		graphics.drawImage(sprite, this.getX(), this.getY(), null);
+		graphics.drawImage(sprite, this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 	}
 	
 	public int getX() {

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import br.com.inarigames.main.Game;
+import br.com.inarigames.world.Camera;
 
 public class Player extends Entity{
 	
@@ -64,13 +65,18 @@ public class Player extends Entity{
 			}
 		}
 		
+		int cameraX = this.x - (Game.GAME_WIDTH)/2;
+		int cameraY = this.y - (Game.GAME_HEIGHT)/2;
+		Camera.setX(cameraX);
+		Camera.setY(cameraY);
+		
 	}
 	
 	public void render(Graphics graphics) {
 		if(direction == right_dir) {
-			graphics.drawImage(rightPlayer[imageIndex], this.getX(), this.getY(), null);
+			graphics.drawImage(rightPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 		} else if(direction == left_dir) {
-			graphics.drawImage(leftPlayer[imageIndex], this.getX(), this.getY(), null);
+			graphics.drawImage(leftPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 		} 
 		
 	}
