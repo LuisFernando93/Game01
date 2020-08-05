@@ -20,8 +20,8 @@ public class Player extends Entity{
 	private int left_dir = 1;
 	private int direction = right_dir;
 
-	public Player(int x, int y, int width, int height, BufferedImage sprite) {
-		super(x, y, width, height, sprite);
+	public Player(int x, int y, int width, int height) {
+		super(x, y, width, height);
 		
 		rightPlayer = new BufferedImage[4];
 		leftPlayer = new BufferedImage[4];

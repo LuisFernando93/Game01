@@ -6,6 +6,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import br.com.inarigames.entities.Ammo;
+import br.com.inarigames.entities.Apple;
+import br.com.inarigames.entities.Enemy;
+import br.com.inarigames.entities.Weapon;
+import br.com.inarigames.main.Game;
+
 public class World {
 	
 	private Tile[][] tiles;
@@ -24,10 +30,11 @@ public class World {
 			for (int i = 0; i < WIDTH; i++) {
 				for (int j = 0; j < HEIGHT; j++) {
 					int pixelAtual = pixels[i + (j*WIDTH)];
+					tiles[i][j] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
 					switch (pixelAtual) {
 						case 0xFF000000:
 							//preto - floor
-							tiles[i][j] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
+							//tiles[i][j] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
 							break;
 					
 						case 0xFFFFFFFF:
@@ -37,12 +44,33 @@ public class World {
 							
 						case 0xFF0000FF:
 							//azul - player
-							tiles[i][j] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
+							Game.player.setX(i*16);
+							Game.player.setY(j*16);
+							break;
+							
+						case 0xFFFF0000:
+							//vermelho - inimigo
+							Game.entities.add(new Enemy(i*16,j*16,16,16));
+							break;
+						
+						case 0xFF00FF00:
+							//verde - arma
+							Game.entities.add(new Weapon(i*16,j*16, 16, 16));
+							break;
+						
+						case 0xFFFFFF00:
+							//amarelo - municao
+							Game.entities.add(new Ammo(i*16,j*16, 16, 16));
+							break;
+							
+						case 0xFFFF00FF:
+							//roxo - vida
+							Game.entities.add(new Apple(i*16,j*16, 16, 16));
 							break;
 							
 						default:
 							//padrao - floor
-							tiles[i][j] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
+							//tiles[i][j] = new FloorTile(i*16, j*16, Tile.TILE_FLOOR);
 							break;
 							
 					}
