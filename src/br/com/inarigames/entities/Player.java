@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import br.com.inarigames.main.Game;
 import br.com.inarigames.world.Camera;
+import br.com.inarigames.world.World;
 
 public class Player extends Entity{
 	
@@ -31,6 +32,22 @@ public class Player extends Entity{
 			rightPlayer[i] = Game.spritesheet.getSprite(32+(i*16), 0, 16, 16);
 			leftPlayer[i] = Game.spritesheet.getSprite(32+(i*16), 16, 16, 16);
 		}
+	}
+	
+	public void setRight(boolean right) {
+		this.right = right;
+	}
+	
+	public void setLeft(boolean left) {
+		this.left = left;
+	}
+	
+	public void setUp(boolean up) {
+		this.up = up;
+	}
+	
+	public void setDown(boolean down) {
+		this.down = down;
 	}
 	
 	public void update() {
@@ -65,8 +82,8 @@ public class Player extends Entity{
 			}
 		}
 		
-		int cameraX = this.x - (Game.GAME_WIDTH)/2;
-		int cameraY = this.y - (Game.GAME_HEIGHT)/2;
+		int cameraX = Camera.clamp(this.getX() - (Game.GAME_WIDTH)/2, 0, World.WIDTH*16 - Game.GAME_WIDTH);
+		int cameraY = Camera.clamp(this.getY() - (Game.GAME_HEIGHT)/2, 0, World.HEIGHT*16 - Game.GAME_HEIGHT);
 		Camera.setX(cameraX);
 		Camera.setY(cameraY);
 		
@@ -79,22 +96,6 @@ public class Player extends Entity{
 			graphics.drawImage(leftPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 		} 
 		
-	}
-	
-	public void setRight(boolean right) {
-		this.right = right;
-	}
-	
-	public void setLeft(boolean left) {
-		this.left = left;
-	}
-	
-	public void setUp(boolean up) {
-		this.up = up;
-	}
-	
-	public void setDown(boolean down) {
-		this.down = down;
 	}
 	
 }

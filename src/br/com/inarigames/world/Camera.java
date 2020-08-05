@@ -19,4 +19,16 @@ public class Camera {
 	public static void setY(int y) {
 		Camera.y = y;
 	}
+	
+	public static int clamp(int position, int min, int max) {
+		
+		if(position < min) {
+			position = min;
+		}
+		if(position > max) {
+			position = max;
+		}
+		
+		return position;
+	}
 }

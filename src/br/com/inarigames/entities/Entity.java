@@ -23,14 +23,6 @@ public class Entity {
 		this.height = height;
 	}
 	
-	public void update() {
-		
-	}
-	
-	public void render(Graphics graphics) {
-		graphics.drawImage(sprite, this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
-	}
-	
 	public int getX() {
 		return this.x;
 	}
@@ -53,5 +45,13 @@ public class Entity {
 	
 	public void setY(int y) {
 		this.y = y;
+	}
+	
+	public void update() {
+		
+	}
+	
+	public void render(Graphics graphics) {
+		graphics.drawImage(sprite, this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 	}
 }
