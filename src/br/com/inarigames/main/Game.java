@@ -10,9 +10,11 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
+import br.com.inarigames.entities.Enemy;
 import br.com.inarigames.entities.Entity;
 import br.com.inarigames.entities.Player;
 import br.com.inarigames.graphics.Spritesheet;
@@ -34,9 +36,13 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	public static Player player;
 	public static List<Entity> entities;
+	public static List<Enemy> enemies;
 	public static Spritesheet spritesheet =  new Spritesheet("/spritesheet.png");
 	
+	public static Random random;
+	
 	public Game() {
+		random = new Random();
 		addKeyListener(this);
 		setPreferredSize(new Dimension(GAME_WIDTH*GAME_SCALE,GAME_HEIGHT*GAME_SCALE));
 		initFrame();
@@ -44,6 +50,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		image = new BufferedImage(GAME_WIDTH,GAME_HEIGHT,BufferedImage.TYPE_INT_RGB);
 		
 		entities = new ArrayList<Entity>();
+		enemies = new ArrayList<Enemy>();
 		player = new Player(0, 0, 16, 16);
 		entities.add(player);
 		

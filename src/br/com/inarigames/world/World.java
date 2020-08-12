@@ -16,7 +16,7 @@ public class World {
 	
 	private static Tile[][] tiles;
 	public static int WIDTH, HEIGHT;
-	private final static int TILE_SIZE = 16;
+	public final static int TILE_SIZE = 16;
 	
 
 	public World(String path) {
@@ -50,7 +50,9 @@ public class World {
 							
 						case 0xFFFF0000:
 							//vermelho - inimigo
-							Game.entities.add(new Enemy(i*TILE_SIZE,j*TILE_SIZE,16,16));
+							Enemy enemy = new Enemy(i*TILE_SIZE,j*TILE_SIZE,16,16);
+							Game.entities.add(enemy);
+							Game.enemies.add(enemy);
 							break;
 						
 						case 0xFF00FF00:
