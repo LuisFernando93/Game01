@@ -22,7 +22,8 @@ public class Player extends Entity{
 	private int left_dir = 1;
 	private int direction = right_dir;
 	
-	private int life = 100;
+	public static final int MAX_LIFE = 100;
+	private int life = MAX_LIFE;
 
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);

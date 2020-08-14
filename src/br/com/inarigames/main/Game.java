@@ -18,6 +18,7 @@ import br.com.inarigames.entities.Enemy;
 import br.com.inarigames.entities.Entity;
 import br.com.inarigames.entities.Player;
 import br.com.inarigames.graphics.Spritesheet;
+import br.com.inarigames.graphics.UI;
 import br.com.inarigames.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener{
@@ -31,6 +32,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	private final int GAME_SCALE = 3;
 	
 	private BufferedImage image;
+	
+	public UI ui;
 	
 	public static World world;
 	
@@ -47,7 +50,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		setPreferredSize(new Dimension(GAME_WIDTH*GAME_SCALE,GAME_HEIGHT*GAME_SCALE));
 		initFrame();
 		
+		//initializing objects
 		image = new BufferedImage(GAME_WIDTH,GAME_HEIGHT,BufferedImage.TYPE_INT_RGB);
+		
+		ui = new UI();
 		
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
@@ -104,6 +110,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		for (Entity entity : entities) {
 			entity.render(graphics);
 		}
+		
+		ui.render(graphics);
 		
 		graphics.dispose();
 		graphics = bs.getDrawGraphics();
