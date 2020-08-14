@@ -21,6 +21,8 @@ public class Player extends Entity{
 	private int right_dir = 0;
 	private int left_dir = 1;
 	private int direction = right_dir;
+	
+	private int life = 100;
 
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -48,6 +50,14 @@ public class Player extends Entity{
 	
 	public void setDown(boolean down) {
 		this.down = down;
+	}
+	
+	public int getLife() {
+		return this.life;
+	}
+	
+	public void setLife(int life) {
+		this.life = life;
 	}
 	
 	public void update() {
@@ -86,6 +96,11 @@ public class Player extends Entity{
 		int cameraY = Camera.clamp(this.getY() - (Game.GAME_HEIGHT)/2, 0, World.HEIGHT*16 - Game.GAME_HEIGHT);
 		Camera.setX(cameraX);
 		Camera.setY(cameraY);
+		
+		if(this.life <= 0) {
+			//game over
+			System.exit(1);
+		}
 		
 	}
 	
