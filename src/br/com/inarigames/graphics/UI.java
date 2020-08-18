@@ -11,7 +11,7 @@ public class UI {
 	
 	private double healthBar;
 	private static final int HEALTH_BAR_WIDTH = 50;
-	private static final int HEALTH_BAR_HEIGHT = 8;
+	private static final int HEALTH_BAR_HEIGHT = 10;
 	
 	public void render(Graphics graphics) {
 		
@@ -20,8 +20,9 @@ public class UI {
 		graphics.drawRect(20, 20, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT);
 		graphics.setColor(Color.GREEN);
 		graphics.fillRect(20, 20, (int) healthBar, HEALTH_BAR_HEIGHT);		
-//		graphics.setColor(Color.WHITE);
-//		graphics.drawString(Game.player.getLife() + " / " + Player.MAX_LIFE, 15, 15);
+		graphics.setColor(Color.WHITE);
+		graphics.setFont(new Font("arial", Font.BOLD, 12));
+		graphics.drawString(Game.player.getLife() + " / " + Player.MAX_LIFE, 20, 27);
 		
 	}
 }

@@ -3,6 +3,7 @@ package br.com.inarigames.main;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -118,6 +119,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		graphics.dispose();
 		graphics = bs.getDrawGraphics();
 		graphics.drawImage(image, 0, 0, GAME_WIDTH*GAME_SCALE, GAME_HEIGHT*GAME_SCALE, null);
+		graphics.setFont(new Font("arial", Font.BOLD, 20));
+		graphics.setColor(Color.white);
+		graphics.drawString("Munição: " + player.getAmmo(), 600, 20);
 		bs.show();
 	}
 

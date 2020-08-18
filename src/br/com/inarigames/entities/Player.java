@@ -24,6 +24,8 @@ public class Player extends Entity{
 	
 	public static final int MAX_LIFE = 100;
 	private int life = MAX_LIFE;
+	
+	private int ammo = 0;
 
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -61,13 +63,28 @@ public class Player extends Entity{
 		this.life = life;
 	}
 	
+	public int getAmmo() {
+		return this.ammo;
+	}
+	
 	public void checkCollisionApple() {
 		for (Entity entity : Game.entities) {
 			if(entity instanceof Apple) {
 				if(Entity.isColliding(this, entity)) {
 					this.life += ((Apple) entity).getHeal();
-					if (this.life > 100) 
-						life = 100;
+					if (this.life > Player.MAX_LIFE) 
+						life = Player.MAX_LIFE;
+					Game.toRemove.add(entity);
+				}
+			}
+		}
+	}
+	
+	public void checkCollisionAmmo() {
+		for (Entity entity : Game.entities) {
+			if(entity instanceof Ammo) {
+				if(Entity.isColliding(this, entity)) {
+					this.ammo += ((Ammo) entity).getAmmo();
 					Game.toRemove.add(entity);
 				}
 			}
@@ -112,6 +129,7 @@ public class Player extends Entity{
 		Camera.setY(cameraY);
 		
 		checkCollisionApple();
+		checkCollisionAmmo();
 		
 		if(this.life <= 0) {
 			//game over
