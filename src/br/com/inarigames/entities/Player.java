@@ -18,6 +18,9 @@ public class Player extends Entity{
 	private BufferedImage[] rightPlayer;
 	private BufferedImage[] leftPlayer;
 	
+	private BufferedImage damagedPlayerRight = Game.spritesheet.getSprite(0, 16, 16, 16);
+	private BufferedImage damagedPlayerLeft = Game.spritesheet.getSprite(16, 16, 16, 16);
+	
 	private int right_dir = 0;
 	private int left_dir = 1;
 	private int direction = right_dir;
@@ -25,7 +28,12 @@ public class Player extends Entity{
 	public static final int MAX_LIFE = 100;
 	private int life = MAX_LIFE;
 	
+	public boolean isDamaged = false;
+	private int damageFrames = 0;
+	private int maxDamageFrames = 8;
+	
 	private int ammo = 0;
+	
 
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -131,6 +139,14 @@ public class Player extends Entity{
 		checkCollisionApple();
 		checkCollisionAmmo();
 		
+		if (isDamaged) {
+			this.damageFrames++;
+			if(this.damageFrames == maxDamageFrames){
+				this.damageFrames = 0;
+				this.isDamaged = false;
+			}
+		}
+		
 		if(this.life <= 0) {
 			//game over
 			System.exit(1);
@@ -139,12 +155,20 @@ public class Player extends Entity{
 	}
 	
 	public void render(Graphics graphics) {
-		if(direction == right_dir) {
-			graphics.drawImage(rightPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
-		} else if(direction == left_dir) {
-			graphics.drawImage(leftPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
-		} 
-		
+		if(!isDamaged) {
+			if(direction == right_dir) {
+				graphics.drawImage(rightPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			} else if(direction == left_dir) {
+				graphics.drawImage(leftPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			} 
+		} else {
+			if(direction == right_dir) {
+				graphics.drawImage(damagedPlayerRight, this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			} else if(direction == left_dir) {
+				graphics.drawImage(damagedPlayerLeft, this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			} 
+		}
 	}
+	
 	
 }

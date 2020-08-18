@@ -11,7 +11,7 @@ import br.com.inarigames.world.World;
 public class Enemy extends Entity{
 	
 	private int speed = 1;
-	private int power = 1;
+	private int power = 5;
 	private int moveChance = 80;
 	
 	private int frames = 0, maxFrames = 20, imageIndex = 0, maxIndex = 1;
@@ -84,8 +84,11 @@ public class Enemy extends Entity{
 			}
 		} else {
 			//ataque
-			if(Game.random.nextInt(100) < 10) { //10% of chance to take damage
-				Game.player.setLife(Game.player.getLife() -  power);
+			if(!Game.player.isDamaged) { //only damages if not damaged, giving it immortality frames
+				if(Game.random.nextInt(100) < 10) { //10% of chance to take damage
+					Game.player.setLife(Game.player.getLife() -  power);
+					Game.player.isDamaged = true;
+				}
 			}
 		}
 		
