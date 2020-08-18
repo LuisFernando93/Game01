@@ -61,6 +61,19 @@ public class Player extends Entity{
 		this.life = life;
 	}
 	
+	public void checkCollisionApple() {
+		for (Entity entity : Game.entities) {
+			if(entity instanceof Apple) {
+				if(Entity.isColliding(this, entity)) {
+					this.life += ((Apple) entity).getHeal();
+					if (this.life > 100) 
+						life = 100;
+					Game.toRemove.add(entity);
+				}
+			}
+		}
+	}
+	
 	public void update() {
 		
 		moved = false;
@@ -97,6 +110,8 @@ public class Player extends Entity{
 		int cameraY = Camera.clamp(this.getY() - (Game.GAME_HEIGHT)/2, 0, World.HEIGHT*16 - Game.GAME_HEIGHT);
 		Camera.setX(cameraX);
 		Camera.setY(cameraY);
+		
+		checkCollisionApple();
 		
 		if(this.life <= 0) {
 			//game over

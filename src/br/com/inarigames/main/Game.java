@@ -40,6 +40,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static Player player;
 	public static List<Entity> entities;
 	public static List<Enemy> enemies;
+	public static List<Entity> toRemove = new ArrayList();
 	public static Spritesheet spritesheet =  new Spritesheet("/spritesheet.png");
 	
 	public static Random random;
@@ -93,6 +94,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		for (Entity entity : entities) {
 			entity.update();
 		}
+		entities.removeAll(toRemove);
 	}
 	
 	public void render() {
