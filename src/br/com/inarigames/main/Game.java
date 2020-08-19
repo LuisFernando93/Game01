@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import br.com.inarigames.entities.Enemy;
 import br.com.inarigames.entities.Entity;
 import br.com.inarigames.entities.Player;
+import br.com.inarigames.entities.Projectile;
 import br.com.inarigames.graphics.Spritesheet;
 import br.com.inarigames.graphics.UI;
 import br.com.inarigames.world.World;
@@ -41,6 +42,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static Player player;
 	public static List<Entity> entities;
 	public static List<Enemy> enemies;
+	public static List<Projectile> projectiles;
 	public static List<Entity> toRemove = new ArrayList();
 	public static Spritesheet spritesheet =  new Spritesheet("/spritesheet.png");
 	
@@ -59,6 +61,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
+		projectiles = new ArrayList<Projectile>();
 		player = new Player(0, 0, 16, 16);
 		entities.add(player);
 		
@@ -100,6 +103,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
+		projectiles = new ArrayList<Projectile>();
 		player = new Player(0, 0, 16, 16);
 		entities.add(player);
 		world = new World("/map.png");
@@ -112,6 +116,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			entity.update();
 		}
 		entities.removeAll(toRemove);
+		
+		for (Projectile projectile: projectiles) {
+			projectile.update();
+		}
+		projectiles.removeAll(toRemove);
+		
 	}
 	
 	public void render() {
@@ -128,6 +138,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		world.render(graphics);
 		for (Entity entity : entities) {
 			entity.render(graphics);
+		}
+		for (Projectile projectile: projectiles) {
+			projectile.render(graphics);
 		}
 		
 		ui.render(graphics);
@@ -198,6 +211,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			player.setDown(true);
 		}
 		
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.shoot();
+		}
+		
 	}
 
 	@Override
@@ -216,6 +233,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		} else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
 				e.getKeyCode() == KeyEvent.VK_S) {
 			player.setDown(false);
-		}		
+		}	
+		
 	}
 }

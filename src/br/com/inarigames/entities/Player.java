@@ -41,6 +41,7 @@ public class Player extends Entity{
 	private int ammo = 0;
 	
 	private boolean hasWeapon = false;
+	private boolean shootTriggered = false;
 	
 
 	public Player(int x, int y, int width, int height) {
@@ -83,7 +84,11 @@ public class Player extends Entity{
 		return this.ammo;
 	}
 	
-	public void checkCollisionItems() {
+	public void shoot() {
+		this.shootTriggered = true;
+	}
+	
+	private void checkCollisionItems() {
 		for (Entity entity : Game.entities) { 
 			EntityClass item = EntityClass.valueOf(entity.getClass().getSimpleName());
 			switch (item) {
@@ -114,6 +119,41 @@ public class Player extends Entity{
 				}
 				break;
 			}
+		}
+	}
+	
+	private void checkIfWillShoot() {
+		if (shootTriggered && hasWeapon && ammo > 0) {
+			//atira
+			int dx, dy;
+			
+			if(direction == right_dir) {
+				dx = 1;
+			} else {
+				dx = -1;
+			}
+			
+			Projectile projectile = new Projectile(this.getX() + 5, this.getY() + 7, 3, 3, dx, 0);
+			Game.projectiles.add(projectile);
+			this.ammo--;
+		}
+		shootTriggered = false;
+	}
+	
+	private void checkIfIsDamaged() {
+		if (isDamaged) {
+			this.damageFrames++;
+			if(this.damageFrames == maxDamageFrames){
+				this.damageFrames = 0;
+				this.isDamaged = false;
+			}
+		}
+	}
+	
+	private void checkLife() {
+		if(this.life <= 0) {
+			//game over
+			Game.newGame();
 		}
 	}
 	
@@ -155,19 +195,9 @@ public class Player extends Entity{
 		Camera.setY(cameraY);
 		
 		checkCollisionItems();
-		
-		if (isDamaged) {
-			this.damageFrames++;
-			if(this.damageFrames == maxDamageFrames){
-				this.damageFrames = 0;
-				this.isDamaged = false;
-			}
-		}
-		
-		if(this.life <= 0) {
-			//game over
-			Game.newGame();
-		}
+		checkIfWillShoot();
+		checkIfIsDamaged();
+		checkLife();
 		
 	}
 	
