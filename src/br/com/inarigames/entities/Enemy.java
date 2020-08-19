@@ -10,7 +10,7 @@ import br.com.inarigames.world.World;
 
 public class Enemy extends Entity{
 	
-	private int speed = 1;
+	private int speed = 0;
 	private int power = 5;
 	private int moveChance = 80;
 	
@@ -49,8 +49,16 @@ public class Enemy extends Entity{
 		
 		return enemyCurrent.intersects(player);
 	}
+	
+	public void checkIfPlayerMoved() {
+		if(Game.player.movedOnce) {
+			speed = 1;
+		}
+	}
 
 	public void update() {
+		
+		checkIfPlayerMoved();
 		
 		if(!isCollidingWithPlayer()) {
 			if(Game.random.nextInt(100) < moveChance) {

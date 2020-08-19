@@ -15,6 +15,7 @@ public class Player extends Entity{
 	
 	private int frames = 0, maxFrames = 5, imageIndex = 0, maxIndex = 3;
 	private boolean moved = false;
+	public boolean movedOnce = false;
 	
 	private BufferedImage[] rightPlayer;
 	private BufferedImage[] leftPlayer;
@@ -179,6 +180,7 @@ public class Player extends Entity{
 		}
 		
 		if(moved) {
+			movedOnce = true;
 			frames++;
 			if(frames == maxFrames) {
 				frames = 0;

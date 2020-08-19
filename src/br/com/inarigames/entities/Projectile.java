@@ -10,7 +10,7 @@ public class Projectile extends Entity{
 	
 	private int dx, dy;
 	private double speed = 3;
-	private final static int MAX_FLY_TIME = 30;
+	private final static int MAX_FLY_TIME = 80;
 	int flyTime = 0;
 	
 
