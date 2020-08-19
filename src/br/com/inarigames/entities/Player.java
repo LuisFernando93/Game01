@@ -7,6 +7,7 @@ import br.com.inarigames.main.Game;
 import br.com.inarigames.world.Camera;
 import br.com.inarigames.world.World;
 
+
 public class Player extends Entity{
 	
 	private boolean right, left, up, down;
@@ -18,8 +19,13 @@ public class Player extends Entity{
 	private BufferedImage[] rightPlayer;
 	private BufferedImage[] leftPlayer;
 	
-	private BufferedImage damagedPlayerRight = Game.spritesheet.getSprite(0, 16, 16, 16);
-	private BufferedImage damagedPlayerLeft = Game.spritesheet.getSprite(16, 16, 16, 16);
+	private BufferedImage bowRight = Game.spritesheet.getSprite(8*16, 0, 16, 16);
+	private BufferedImage bowLeft = Game.spritesheet.getSprite(9*16, 0, 16, 16);
+	
+	private BufferedImage blankPlayerRight = Game.spritesheet.getSprite(0, 16, 16, 16);
+	private BufferedImage blankPlayerLeft = Game.spritesheet.getSprite(16, 16, 16, 16);
+	private BufferedImage blankBowRight = Game.spritesheet.getSprite(0, 32, 16, 16);
+	private BufferedImage blankBowLeft = Game.spritesheet.getSprite(16, 32, 16, 16);
 	
 	private int right_dir = 0;
 	private int left_dir = 1;
@@ -33,6 +39,8 @@ public class Player extends Entity{
 	private int maxDamageFrames = 8;
 	
 	private int ammo = 0;
+	
+	private boolean hasWeapon = false;
 	
 
 	public Player(int x, int y, int width, int height) {
@@ -75,26 +83,36 @@ public class Player extends Entity{
 		return this.ammo;
 	}
 	
-	public void checkCollisionApple() {
-		for (Entity entity : Game.entities) {
-			if(entity instanceof Apple) {
+	public void checkCollisionItems() {
+		for (Entity entity : Game.entities) { 
+			EntityClass item = EntityClass.valueOf(entity.getClass().getSimpleName());
+			switch (item) {
+			
+			case Apple:
 				if(Entity.isColliding(this, entity)) {
 					this.life += ((Apple) entity).getHeal();
 					if (this.life > Player.MAX_LIFE) 
 						life = Player.MAX_LIFE;
 					Game.toRemove.add(entity);
+					return;
 				}
-			}
-		}
-	}
-	
-	public void checkCollisionAmmo() {
-		for (Entity entity : Game.entities) {
-			if(entity instanceof Ammo) {
+				break;
+			
+			case Ammo:
 				if(Entity.isColliding(this, entity)) {
 					this.ammo += ((Ammo) entity).getAmmo();
 					Game.toRemove.add(entity);
+					return;
 				}
+				break;
+				
+			case Weapon:
+				if(Entity.isColliding(this, entity)) {
+					hasWeapon = true;
+					Game.toRemove.add(entity);
+					return;
+				}
+				break;
 			}
 		}
 	}
@@ -136,8 +154,7 @@ public class Player extends Entity{
 		Camera.setX(cameraX);
 		Camera.setY(cameraY);
 		
-		checkCollisionApple();
-		checkCollisionAmmo();
+		checkCollisionItems();
 		
 		if (isDamaged) {
 			this.damageFrames++;
@@ -149,7 +166,7 @@ public class Player extends Entity{
 		
 		if(this.life <= 0) {
 			//game over
-			System.exit(1);
+			Game.newGame();
 		}
 		
 	}
@@ -158,14 +175,27 @@ public class Player extends Entity{
 		if(!isDamaged) {
 			if(direction == right_dir) {
 				graphics.drawImage(rightPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				if(hasWeapon) {
+					graphics.drawImage(bowRight, this.getX() - Camera.getX() + 5, this.getY() - Camera.getY() + 2, null);
+				}
 			} else if(direction == left_dir) {
 				graphics.drawImage(leftPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				if(hasWeapon) {
+					graphics.drawImage(bowLeft, this.getX() - Camera.getX() - 5, this.getY() - Camera.getY() + 2, null);
+				}
 			} 
 		} else {
 			if(direction == right_dir) {
-				graphics.drawImage(damagedPlayerRight, this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				graphics.drawImage(blankPlayerRight, this.getX() - Camera.getX() , this.getY() - Camera.getY(), null);
+				if(hasWeapon) {
+					graphics.drawImage(blankBowRight, this.getX() - Camera.getX() + 5, this.getY() - Camera.getY() + 2, null);
+				}
+				
 			} else if(direction == left_dir) {
-				graphics.drawImage(damagedPlayerLeft, this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				graphics.drawImage(blankPlayerLeft, this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				if(hasWeapon) {
+					graphics.drawImage(blankBowLeft, this.getX() - Camera.getX() - 5, this.getY() - Camera.getY() + 2, null);
+				}
 			} 
 		}
 	}

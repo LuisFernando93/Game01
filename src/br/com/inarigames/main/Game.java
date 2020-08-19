@@ -66,6 +66,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 	}
 	
+	public static void main(String[] args) {
+		Game game = new Game();
+		game.start();
+	}
+	
 	public void initFrame() {
 		frame = new JFrame("Game #1");
 		frame.add(this);
@@ -89,6 +94,17 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void newGame() {
+		
+		entities = new ArrayList<Entity>();
+		enemies = new ArrayList<Enemy>();
+		player = new Player(0, 0, 16, 16);
+		entities.add(player);
+		world = new World("/map.png");
+		return;
+		
 	}
 	
 	public void update() {
@@ -123,11 +139,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		graphics.setColor(Color.white);
 		graphics.drawString("Munição: " + player.getAmmo(), 600, 20);
 		bs.show();
-	}
-
-	public static void main(String[] args) {
-		Game game = new Game();
-		game.start();
 	}
 	
 	@Override

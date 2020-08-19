@@ -17,12 +17,12 @@ public class UI {
 		
 		healthBar = ((double)Game.player.getLife() / Player.MAX_LIFE) * HEALTH_BAR_WIDTH;
 		graphics.setColor(Color.BLACK);
-		graphics.drawRect(20, 20, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT);
+		graphics.drawRect(20, 10, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT);
 		graphics.setColor(Color.GREEN);
-		graphics.fillRect(20, 20, (int) healthBar, HEALTH_BAR_HEIGHT);		
+		graphics.fillRect(20, 10, (int) healthBar, HEALTH_BAR_HEIGHT);		
 		graphics.setColor(Color.WHITE);
 		graphics.setFont(new Font("arial", Font.BOLD, 12));
-		graphics.drawString(Game.player.getLife() + " / " + Player.MAX_LIFE, 20, 27);
+		graphics.drawString(Game.player.getLife() + " / " + Player.MAX_LIFE, 20, 17);
 		
 	}
 }
