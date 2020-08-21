@@ -8,13 +8,13 @@ import br.com.inarigames.world.Camera;
 
 public class Projectile extends Entity{
 	
-	private int dx, dy;
+	private double dx, dy;
 	private double speed = 3;
-	private final static int MAX_FLY_TIME = 80;
+	private final static int MAX_FLY_TIME = 50;
 	int flyTime = 0;
 	
 
-	public Projectile(int x, int y, int width, int height, int dx, int dy) {
+	public Projectile(int x, int y, int width, int height, double dx, double dy) {
 		super(x, y, width, height);
 		this.dx = dx;
 		this.dy = dy;
@@ -30,7 +30,7 @@ public class Projectile extends Entity{
 	}
 	
 	public void render(Graphics graphics) {
-		graphics.setColor(Color.YELLOW);
+		graphics.setColor(Color.BLUE);
 		graphics.fillOval(this.getX() - Camera.getX(), this.getY() - Camera.getY(), width, height);
 	}
 }

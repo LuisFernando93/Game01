@@ -39,10 +39,13 @@ public class Player extends Entity{
 	private int damageFrames = 0;
 	private int maxDamageFrames = 8;
 	
-	private int ammo = 0;
+	private int ammo = 100000;
 	
 	private boolean hasWeapon = false;
-	private boolean shootTriggered = false;
+	private boolean shootKeyboardTriggered = false;
+	private boolean shootMouseTriggered = false;
+	
+	private int mx, my;
 	
 
 	public Player(int x, int y, int width, int height) {
@@ -85,8 +88,17 @@ public class Player extends Entity{
 		return this.ammo;
 	}
 	
-	public void shoot() {
-		this.shootTriggered = true;
+	public void setMousePosition(int x, int y) {
+		this.mx = x;
+		this.my = y;
+	}
+	
+	public void shootKeyboard() {
+		this.shootKeyboardTriggered = true;
+	}
+	
+	public void shootMouse() {
+		this.shootMouseTriggered = true;
 	}
 	
 	private void checkCollisionItems() {
@@ -124,21 +136,51 @@ public class Player extends Entity{
 	}
 	
 	private void checkIfWillShoot() {
-		if (shootTriggered && hasWeapon && ammo > 0) {
-			//atira
-			int dx, dy;
-			
-			if(direction == right_dir) {
-				dx = 1;
-			} else {
-				dx = -1;
+		if (shootKeyboardTriggered) {
+			if (hasWeapon && ammo > 0) {
+				//atira
+				int dx;
+				int px;
+				int py = 7;
+				
+				if(direction == right_dir) {
+					dx = 1;
+					px = 5;
+					
+				} else {
+					dx = -1;
+					px = 7;
+				}
+				
+				Projectile projectile = new Projectile(this.x + px, this.y + py, 3, 3, dx, 0);
+				Game.projectiles.add(projectile);
+				this.ammo--;
 			}
-			
-			Projectile projectile = new Projectile(this.getX() + 5, this.getY() + 7, 3, 3, dx, 0);
-			Game.projectiles.add(projectile);
-			this.ammo--;
+			shootKeyboardTriggered = false;
 		}
-		shootTriggered = false;
+		
+		if (shootMouseTriggered) {
+			if (hasWeapon && ammo > 0) {
+				//atira
+				double rad = Math.atan2(my - (this.y + 8 - Camera.getY()), mx - (this.x + 8 - Camera.getX()));
+				double dx = Math.cos(rad);
+				double dy = Math.sin(rad);
+				int px;
+				int py = 7;
+				
+				if(direction == right_dir) {
+					px = 5;
+					
+				} else {
+					px = 7;
+				}
+				 
+				Projectile projectile = new Projectile(this.x + 5, this.y + 7, 3, 3, dx, dy);
+				Game.projectiles.add(projectile);
+				this.ammo--;
+			}
+		shootMouseTriggered = false;
+		}
 	}
 	
 	private void checkIfIsDamaged() {

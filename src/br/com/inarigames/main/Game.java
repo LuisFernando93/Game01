@@ -23,6 +23,7 @@ import br.com.inarigames.entities.Player;
 import br.com.inarigames.entities.Projectile;
 import br.com.inarigames.graphics.Spritesheet;
 import br.com.inarigames.graphics.UI;
+import br.com.inarigames.world.Camera;
 import br.com.inarigames.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener{
@@ -33,7 +34,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static final int GAME_WIDTH = 240;
 	public static final int GAME_HEIGHT = 160;
-	private final int GAME_SCALE = 3;
+	private static final int GAME_SCALE = 3;
 	
 	private BufferedImage image;
 	
@@ -53,6 +54,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public Game() {
 		random = new Random();
 		addKeyListener(this);
+		addMouseListener(this);
 		setPreferredSize(new Dimension(GAME_WIDTH*GAME_SCALE,GAME_HEIGHT*GAME_SCALE));
 		initFrame();
 		
@@ -123,6 +125,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			projectile.update();
 		}
 		projectiles.removeAll(toRemove);
+		toRemove = new ArrayList();
 		
 	}
 	
@@ -214,7 +217,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 		
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			player.shoot();
+			player.shootKeyboard();
 		}
 		
 	}
@@ -247,8 +250,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		player.shootMouse();
+		int mx = (e.getX()/GAME_SCALE);
+		int my = (e.getY()/GAME_SCALE);
+		player.setMousePosition(mx, my);
 	}
 
 	@Override

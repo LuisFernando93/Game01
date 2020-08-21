@@ -20,6 +20,14 @@ public class Camera {
 		Camera.y = y;
 	}
 	
+	public static int offsetCameraX(int x) {
+		return x - Camera.x;
+	}
+	
+	public static int offsetCameraY(int y) {
+		return y - Camera.y;
+	}
+	
 	public static int clamp(int position, int min, int max) {
 		
 		if(position < min) {
