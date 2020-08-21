@@ -12,6 +12,7 @@ public class Enemy extends Entity{
 	
 	private int speed = 0;
 	private int power = 5;
+	private int life = 20;
 	private int moveChance = 80;
 	
 	private int frames = 0, maxFrames = 20, imageIndex = 0, maxIndex = 1;
@@ -50,16 +51,33 @@ public class Enemy extends Entity{
 		return enemyCurrent.intersects(player);
 	}
 	
-	public void checkIfPlayerMoved() {
+	public boolean isCollidingWithProjectile() {
+		Rectangle enemyCurrent = new Rectangle(this.x+maskx,this.y+masky,maskw,maskh);
+		for (Projectile projectile : Game.projectiles) {
+			Rectangle projectileRect = new Rectangle(projectile.getX(), projectile.y, projectile.getWidth(), projectile.getHeight());
+			if (enemyCurrent.intersects(projectileRect)) {
+				//inimigo atingido
+				Game.toRemove.add(projectile);
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private void checkIfPlayerMoved() {
 		if(Game.player.movedOnce) {
 			speed = 1;
 		}
 	}
-
-	public void update() {
-		
-		checkIfPlayerMoved();
-		
+	
+	private void checkLife(){
+		if (this.life <= 0) {
+			Game.toRemove.add(this);
+		}
+	}
+	
+	private void moveAndAttack() {
 		if(!isCollidingWithPlayer()) {
 			if(Game.random.nextInt(100) < moveChance) {
 				
@@ -99,6 +117,21 @@ public class Enemy extends Entity{
 				}
 			}
 		}
+	}
+	
+	private void CheckIfIsDamaged() {
+		if (isCollidingWithProjectile()) {
+			System.out.println("atingido");
+			this.life -= Projectile.getPower();
+		}
+	}
+
+	public void update() {
+		
+		checkIfPlayerMoved();
+		moveAndAttack();
+		CheckIfIsDamaged();
+		checkLife();
 		
 	}
 	
