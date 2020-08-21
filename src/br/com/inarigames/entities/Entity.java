@@ -73,6 +73,6 @@ public class Entity {
 	}
 	
 	public void render(Graphics graphics) {
-		graphics.drawImage(sprite, this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+		graphics.drawImage(sprite, Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
 	}
 }

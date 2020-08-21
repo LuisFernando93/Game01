@@ -39,7 +39,7 @@ public class Player extends Entity{
 	private int damageFrames = 0;
 	private int maxDamageFrames = 8;
 	
-	private int ammo = 100000;
+	private int ammo = 0;
 	
 	private boolean hasWeapon = false;
 	private boolean shootKeyboardTriggered = false;
@@ -162,7 +162,7 @@ public class Player extends Entity{
 		if (shootMouseTriggered) {
 			if (hasWeapon && ammo > 0) {
 				//atira
-				double rad = Math.atan2(my - (this.y + 8 - Camera.getY()), mx - (this.x + 8 - Camera.getX()));
+				double rad = Math.atan2(my - (Camera.offsetCameraY(this.y + 8)), mx - (Camera.offsetCameraX(this.x + 8)));
 				double dx = Math.cos(rad);
 				double dy = Math.sin(rad);
 				int px;
@@ -248,27 +248,27 @@ public class Player extends Entity{
 	public void render(Graphics graphics) {
 		if(!isDamaged) {
 			if(direction == right_dir) {
-				graphics.drawImage(rightPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				graphics.drawImage(rightPlayer[imageIndex], Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
 				if(hasWeapon) {
-					graphics.drawImage(bowRight, this.getX() - Camera.getX() + 5, this.getY() - Camera.getY() + 2, null);
+					graphics.drawImage(bowRight, Camera.offsetCameraX(this.x) + 5, Camera.offsetCameraY(this.y) + 2, null);
 				}
 			} else if(direction == left_dir) {
-				graphics.drawImage(leftPlayer[imageIndex], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				graphics.drawImage(leftPlayer[imageIndex], Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
 				if(hasWeapon) {
-					graphics.drawImage(bowLeft, this.getX() - Camera.getX() - 5, this.getY() - Camera.getY() + 2, null);
+					graphics.drawImage(bowLeft, Camera.offsetCameraX(this.x) - 5, Camera.offsetCameraY(this.y) + 2, null);
 				}
 			} 
 		} else {
 			if(direction == right_dir) {
-				graphics.drawImage(blankPlayerRight, this.getX() - Camera.getX() , this.getY() - Camera.getY(), null);
+				graphics.drawImage(blankPlayerRight, Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
 				if(hasWeapon) {
-					graphics.drawImage(blankBowRight, this.getX() - Camera.getX() + 5, this.getY() - Camera.getY() + 2, null);
+					graphics.drawImage(blankBowRight, Camera.offsetCameraX(this.x) + 5, Camera.offsetCameraY(this.y) + 2, null);
 				}
 				
 			} else if(direction == left_dir) {
-				graphics.drawImage(blankPlayerLeft, this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				graphics.drawImage(blankPlayerLeft, Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
 				if(hasWeapon) {
-					graphics.drawImage(blankBowLeft, this.getX() - Camera.getX() - 5, this.getY() - Camera.getY() + 2, null);
+					graphics.drawImage(blankBowLeft, Camera.offsetCameraX(this.x) - 5, Camera.offsetCameraY(this.y) + 2, null);
 				}
 			} 
 		}

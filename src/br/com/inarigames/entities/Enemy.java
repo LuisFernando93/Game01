@@ -103,6 +103,6 @@ public class Enemy extends Entity{
 	}
 	
 	public void render(Graphics graphics) {
-		graphics.drawImage(enemySprites[imageIndex], this.x - Camera.getX(), this.y - Camera.getY(), null);
+		graphics.drawImage(enemySprites[imageIndex], Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
 	}
 }
