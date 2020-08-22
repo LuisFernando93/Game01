@@ -15,18 +15,23 @@ public class Enemy extends Entity{
 	private int life = 20;
 	private int moveChance = 80;
 	
-	private int frames = 0, maxFrames = 20, imageIndex = 0, maxIndex = 1;
-	private boolean moved = false;
+	private int damageFrames = 0;
+	private int maxDamageFrames = 8;
 	
+	private int frames = 0, maxFrames = 20, imageIndex = 0, maxIndex = 1;
 	private int maskx = 5, masky = 5, maskw = 10, maskh = 10;
 	
 	private BufferedImage[] enemySprites;
+	private BufferedImage damagedEnemySprite;
+	
+	private boolean isDamaged = false;
 
 	public Enemy(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		enemySprites = new BufferedImage[2];
 		enemySprites[0] = ENEMY_EN1; 
-		enemySprites[1] = ENEMY_EN2; 
+		enemySprites[1] = ENEMY_EN2;
+		damagedEnemySprite = BLANK_ENEMY_EN;
 	}
 	
 	public boolean isColliding(int xnext, int ynext) {
@@ -38,6 +43,7 @@ public class Enemy extends Entity{
 			}
 			Rectangle targetEnemy = new Rectangle(enemy.getX()+maskx,enemy.getY()+masky,maskw,maskh);
 			if (enemyCurrent.intersects(targetEnemy)) {
+				targetEnemy = null;
 				return true;
 			}
 		}
@@ -119,10 +125,18 @@ public class Enemy extends Entity{
 		}
 	}
 	
-	private void CheckIfIsDamaged() {
+	private void checkIfIsDamaged() {
 		if (isCollidingWithProjectile()) {
-			System.out.println("atingido");
-			this.life -= Projectile.getPower();
+			isDamaged = true;
+			this.life -= Projectile.getPower();	
+			this.damageFrames = 0;
+		}
+		if (isDamaged) {
+			this.damageFrames++;
+			if(this.damageFrames == maxDamageFrames){
+				this.damageFrames = 0;
+				this.isDamaged = false;
+			}
 		}
 	}
 
@@ -130,12 +144,18 @@ public class Enemy extends Entity{
 		
 		checkIfPlayerMoved();
 		moveAndAttack();
-		CheckIfIsDamaged();
+		checkIfIsDamaged();
 		checkLife();
 		
 	}
 	
 	public void render(Graphics graphics) {
-		graphics.drawImage(enemySprites[imageIndex], Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
+		
+		if (!isDamaged) {
+			graphics.drawImage(enemySprites[imageIndex], Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
+		} else {
+			graphics.drawImage(damagedEnemySprite, Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
+		}
+		
 	}
 }

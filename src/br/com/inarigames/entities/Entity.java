@@ -14,6 +14,7 @@ public class Entity {
 	protected static BufferedImage AMMO_EN = Game.spritesheet.getSprite(6*16, 16, 16, 16);
 	protected static BufferedImage ENEMY_EN1 = Game.spritesheet.getSprite(7*16, 16, 16, 16);
 	protected static BufferedImage ENEMY_EN2 = Game.spritesheet.getSprite(8*16, 16, 16, 16);
+	protected static BufferedImage BLANK_ENEMY_EN = Game.spritesheet.getSprite(9*16, 16, 16, 16);
 	
 	protected int x, y, width, height;
 	protected BufferedImage sprite;

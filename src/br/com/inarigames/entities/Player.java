@@ -101,6 +101,40 @@ public class Player extends Entity{
 		this.shootMouseTriggered = true;
 	}
 	
+	private void movePlayer() {
+		
+		moved = false;
+		if(right && World.isFree(x+speed, y)) {
+			moved = true;
+			direction = right_dir;
+			x+=speed;
+		} else if(left && World.isFree(x-speed, y)) {
+			moved = true;
+			direction = left_dir;
+			x-=speed;
+		}
+		
+		if(up && World.isFree(x, y-speed)) {
+			moved = true;
+			y-=speed;
+		} else if(down && World.isFree(x, y+speed)) {
+			moved = true;
+			y+=speed;
+		}
+		
+		if(moved) {
+			movedOnce = true;
+			frames++;
+			if(frames == maxFrames) {
+				frames = 0;
+				imageIndex++;
+				if(imageIndex > maxIndex) {
+					imageIndex = 0;
+				}
+			}
+		}
+	}
+	
 	private void checkCollisionItems() {
 		for (Entity entity : Game.entities) { 
 			EntityClass item = EntityClass.valueOf(entity.getClass().getSimpleName());
@@ -184,6 +218,7 @@ public class Player extends Entity{
 	}
 	
 	private void checkIfIsDamaged() {
+		
 		if (isDamaged) {
 			this.damageFrames++;
 			if(this.damageFrames == maxDamageFrames){
@@ -201,37 +236,8 @@ public class Player extends Entity{
 	}
 	
 	public void update() {
-		
-		moved = false;
-		if(right && World.isFree(x+speed, y)) {
-			moved = true;
-			direction = right_dir;
-			x+=speed;
-		} else if(left && World.isFree(x-speed, y)) {
-			moved = true;
-			direction = left_dir;
-			x-=speed;
-		}
-		
-		if(up && World.isFree(x, y-speed)) {
-			moved = true;
-			y-=speed;
-		} else if(down && World.isFree(x, y+speed)) {
-			moved = true;
-			y+=speed;
-		}
-		
-		if(moved) {
-			movedOnce = true;
-			frames++;
-			if(frames == maxFrames) {
-				frames = 0;
-				imageIndex++;
-				if(imageIndex > maxIndex) {
-					imageIndex = 0;
-				}
-			}
-		}
+
+		movePlayer();
 		
 		int cameraX = Camera.clamp(this.getX() - (Game.GAME_WIDTH)/2, 0, World.WIDTH*16 - Game.GAME_WIDTH);
 		int cameraY = Camera.clamp(this.getY() - (Game.GAME_HEIGHT)/2, 0, World.HEIGHT*16 - Game.GAME_HEIGHT);
@@ -273,6 +279,4 @@ public class Player extends Entity{
 			} 
 		}
 	}
-	
-	
 }

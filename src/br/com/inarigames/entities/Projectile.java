@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import br.com.inarigames.main.Game;
 import br.com.inarigames.world.Camera;
+import br.com.inarigames.world.World;
 
 public class Projectile extends Entity{
 	
@@ -26,8 +27,16 @@ public class Projectile extends Entity{
 	}
 
 	public void update() {
-		this.x += dx*speed;
-		this.y += dy*speed;
+		
+		int xnext = (int) (this.x + dx*speed);
+		int ynext = (int) (this.y + dy*speed);
+		
+		if(World.isFree(xnext, ynext)) {
+			this.x += dx*speed;
+			this.y += dy*speed;
+		} else {
+			Game.toRemove.add(this);
+		}
 		flyTime++;
 		if(this.flyTime == MAX_FLY_TIME) {
 			Game.toRemove.add(this);
