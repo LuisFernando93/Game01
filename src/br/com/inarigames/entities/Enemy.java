@@ -43,7 +43,6 @@ public class Enemy extends Entity{
 			}
 			Rectangle targetEnemy = new Rectangle(enemy.getX()+maskx,enemy.getY()+masky,maskw,maskh);
 			if (enemyCurrent.intersects(targetEnemy)) {
-				targetEnemy = null;
 				return true;
 			}
 		}

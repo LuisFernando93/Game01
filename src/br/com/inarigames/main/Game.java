@@ -119,13 +119,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		for (Entity entity : entities) {
 			entity.update();
 		}
-		entities.removeAll(toRemove);
+		
 		
 		for (Projectile projectile: projectiles) {
 			projectile.update();
 		}
 		projectiles.removeAll(toRemove);
-		toRemove = new ArrayList();
+		entities.removeAll(toRemove);
+		enemies.removeAll(toRemove);
+		toRemove.clear();
 		
 	}
 	

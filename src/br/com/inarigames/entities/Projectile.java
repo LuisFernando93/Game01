@@ -28,15 +28,9 @@ public class Projectile extends Entity{
 
 	public void update() {
 		
-		int xnext = (int) (this.x + dx*speed);
-		int ynext = (int) (this.y + dy*speed);
-		
-		if(World.isFree(xnext, ynext)) {
-			this.x += dx*speed;
-			this.y += dy*speed;
-		} else {
-			Game.toRemove.add(this);
-		}
+		this.x += dx*speed;
+		this.y += dy*speed;
+
 		flyTime++;
 		if(this.flyTime == MAX_FLY_TIME) {
 			Game.toRemove.add(this);
