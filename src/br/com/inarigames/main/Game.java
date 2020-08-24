@@ -51,6 +51,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static Random random;
 	
+	private static int level = 1;
+	private static final int MAX_LEVEL = 2;
+	
 	public Game() {
 		random = new Random();
 		addKeyListener(this);
@@ -69,7 +72,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		player = new Player(0, 0, 16, 16);
 		entities.add(player);
 		
-		world = new World("/map.png");
+		world = new World("/level1.png");
 		
 	}
 	
@@ -105,14 +108,25 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static void newGame() {
 		
-		entities = new ArrayList<Entity>();
-		enemies = new ArrayList<Enemy>();
-		projectiles = new ArrayList<Projectile>();
-		player = new Player(0, 0, 16, 16);
-		entities.add(player);
-		world = new World("/map.png");
+		level = 1;
+		World.newWorld("level" + level + ".png");
 		return;
 		
+	}
+	
+	private void checkEnemies() {
+		if(enemies.size() == 0) {
+			 nextLevel();
+		 }
+	}
+	
+	private void nextLevel() {
+		 level++;
+		 if(level > MAX_LEVEL) {
+			 level = 1;
+		 }
+		 String nextWorld = "level" + level + ".png";
+		 World.newWorld(nextWorld);
 	}
 	
 	public void update() {
@@ -128,6 +142,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		entities.removeAll(toRemove);
 		enemies.removeAll(toRemove);
 		toRemove.clear();
+		checkEnemies();
 		
 	}
 	

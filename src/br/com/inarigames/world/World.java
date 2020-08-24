@@ -3,12 +3,16 @@ package br.com.inarigames.world;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 import br.com.inarigames.entities.Ammo;
 import br.com.inarigames.entities.Apple;
 import br.com.inarigames.entities.Enemy;
+import br.com.inarigames.entities.Entity;
+import br.com.inarigames.entities.Player;
+import br.com.inarigames.entities.Projectile;
 import br.com.inarigames.entities.Weapon;
 import br.com.inarigames.main.Game;
 
@@ -83,6 +87,16 @@ public class World {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static void newWorld(String world) {
+		Game.entities = new ArrayList<Entity>();
+		Game.enemies = new ArrayList<Enemy>();
+		Game.projectiles = new ArrayList<Projectile>();
+		Game.player = new Player(0, 0, 16, 16);
+		Game.entities.add(Game.player);
+		Game.world = new World("/" + world);
+		return;
 	}
 	
 	public static boolean isFree(int xnext, int ynext) {
