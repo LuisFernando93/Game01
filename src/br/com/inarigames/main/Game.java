@@ -42,6 +42,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public UI ui;
 	
 	private static String gameState = "NORMAL";
+	private boolean showMessageGameOver = true;
+	private int framesGameOver = 0;
+	private final int MAX_FRAMES_GAME_OVER = 30;
+	private boolean restartGame = false;
 	
 	public static World world;
 	
@@ -140,6 +144,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		switch (gameState) {
 		
 		case "NORMAL":
+			this.restartGame = false;
 			for (Entity entity : entities) {
 				entity.update();
 			}
@@ -156,6 +161,21 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			break;
 
 		case "GAME_OVER":
+			this.framesGameOver++;
+			if(this.framesGameOver == MAX_FRAMES_GAME_OVER) {
+				this.framesGameOver = 0;
+				if (this.showMessageGameOver) 
+					this.showMessageGameOver = false;
+				  else
+					this.showMessageGameOver = true;
+			}
+			
+			if(restartGame) {
+				this.restartGame = false;
+				Game.gameState = "NORMAL";
+				Game.newGame();
+			}
+			
 			break;
 			
 		default:
@@ -201,7 +221,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			graphics.setFont(new Font("arial", Font.BOLD, 30));
 			graphics.drawString("Game Over", (GAME_WIDTH*GAME_SCALE)/2 - 60, (GAME_HEIGHT*GAME_SCALE)/2);
 			graphics.setFont(new Font("arial", Font.BOLD, 25));
-			graphics.drawString(">Pressione Enter para reiniciar<", (GAME_WIDTH*GAME_SCALE)/2 - 170, (GAME_HEIGHT*GAME_SCALE)/2 + 40);
+			if (showMessageGameOver) {
+				graphics.drawString(">Pressione Enter para reiniciar<", (GAME_WIDTH*GAME_SCALE)/2 - 170, (GAME_HEIGHT*GAME_SCALE)/2 + 40);
+			}
+			
 		}
 		
 		bs.show();
@@ -288,6 +311,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			player.setDown(false);
 		}	
 		
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			this.restartGame = true;
+		}
 	}
 
 	@Override
