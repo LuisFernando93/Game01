@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -40,6 +41,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public UI ui;
 	
+	private static String gameState = "NORMAL";
+	
 	public static World world;
 	
 	public static Player player;
@@ -74,6 +77,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		world = new World("/level1.png");
 		
+	}
+	
+	public static void gameOver() {
+		Game.gameState = "GAME_OVER";
 	}
 	
 	public static void main(String[] args) {
@@ -130,19 +137,30 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	}
 	
 	public void update() {
-		for (Entity entity : entities) {
-			entity.update();
-		}
+		switch (gameState) {
 		
-		
-		for (Projectile projectile: projectiles) {
-			projectile.update();
+		case "NORMAL":
+			for (Entity entity : entities) {
+				entity.update();
+			}
+			
+			for (Projectile projectile: projectiles) {
+				projectile.update();
+			}
+			
+			projectiles.removeAll(toRemove);
+			entities.removeAll(toRemove);
+			enemies.removeAll(toRemove);
+			toRemove.clear();
+			checkEnemies();
+			break;
+
+		case "GAME_OVER":
+			break;
+			
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + gameState);
 		}
-		projectiles.removeAll(toRemove);
-		entities.removeAll(toRemove);
-		enemies.removeAll(toRemove);
-		toRemove.clear();
-		checkEnemies();
 		
 	}
 	
@@ -173,6 +191,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		graphics.setFont(new Font("arial", Font.BOLD, 20));
 		graphics.setColor(Color.white);
 		graphics.drawString("Munição: " + player.getAmmo(), 580, 20);
+		
+		if(Game.gameState == "GAME_OVER") {
+			Graphics2D graphics2 = (Graphics2D) graphics;
+			graphics.setFont(new Font("arial", Font.BOLD, 30));
+			graphics2.setColor(new Color(0, 0, 0, 100));
+			graphics2.fillRect(0, 0, GAME_WIDTH*GAME_SCALE, GAME_HEIGHT*GAME_SCALE);
+			graphics.setColor(Color.white);
+			graphics.setFont(new Font("arial", Font.BOLD, 30));
+			graphics.drawString("Game Over", (GAME_WIDTH*GAME_SCALE)/2 - 60, (GAME_HEIGHT*GAME_SCALE)/2);
+			graphics.setFont(new Font("arial", Font.BOLD, 25));
+			graphics.drawString(">Pressione Enter para reiniciar<", (GAME_WIDTH*GAME_SCALE)/2 - 170, (GAME_HEIGHT*GAME_SCALE)/2 + 40);
+		}
+		
 		bs.show();
 	}
 	
