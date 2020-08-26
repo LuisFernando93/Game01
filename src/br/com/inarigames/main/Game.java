@@ -61,6 +61,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private static int level = 1;
 	private static final int MAX_LEVEL = 2;
 	private Menu menu;
+	private GameOver gameOver;
 	
 	public Game() {
 		random = new Random();
@@ -74,6 +75,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		ui = new UI();
 		menu = new Menu();
+		gameOver = new GameOver();
 		
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
@@ -85,8 +87,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 	}
 	
-	public static void gameOver() {
-		Game.gameState = "GAME_OVER";
+	public static void setGameState(String gameState) {
+		Game.gameState = gameState;
 	}
 	
 	public static void main(String[] args) {
@@ -163,20 +165,22 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			break;
 
 		case "GAME_OVER":
-			this.framesGameOver++;
-			if(this.framesGameOver == MAX_FRAMES_GAME_OVER) {
-				this.framesGameOver = 0;
-				if (this.showMessageGameOver) 
-					this.showMessageGameOver = false;
-				  else
-					this.showMessageGameOver = true;
-			}
 			
-			if(restartGame) {
-				this.restartGame = false;
-				Game.gameState = "NORMAL";
-				Game.newGame();
-			}
+			gameOver.update();
+//			this.framesGameOver++;
+//			if(this.framesGameOver == MAX_FRAMES_GAME_OVER) {
+//				this.framesGameOver = 0;
+//				if (this.showMessageGameOver) 
+//					this.showMessageGameOver = false;
+//				  else
+//					this.showMessageGameOver = true;
+//			}
+//			
+//			if(restartGame) {
+//				this.restartGame = false;
+//				Game.gameState = "NORMAL";
+//				Game.newGame();
+//			}
 			
 			break;
 			
@@ -221,17 +225,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		switch (Game.gameState) {
 		
 		case "GAME_OVER":
-			Graphics2D graphics2 = (Graphics2D) graphics;
-			graphics.setFont(new Font("arial", Font.BOLD, 30));
-			graphics2.setColor(new Color(0, 0, 0, 100));
-			graphics2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
-			graphics.setColor(Color.white);
-			graphics.setFont(new Font("arial", Font.BOLD, 30));
-			graphics.drawString("Game Over", (WIDTH*SCALE)/2 - 60, (HEIGHT*SCALE)/2);
-			graphics.setFont(new Font("arial", Font.BOLD, 25));
-			if (showMessageGameOver) {
-				graphics.drawString(">Pressione Enter para reiniciar<", (WIDTH*SCALE)/2 - 170, (HEIGHT*SCALE)/2 + 40);
-			}
+			
+			gameOver.render(graphics);
+//			Graphics2D graphics2 = (Graphics2D) graphics;
+//			graphics.setFont(new Font("arial", Font.BOLD, 30));
+//			graphics2.setColor(new Color(0, 0, 0, 100));
+//			graphics2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
+//			graphics.setColor(Color.white);
+//			graphics.setFont(new Font("arial", Font.BOLD, 30));
+//			graphics.drawString("Game Over", (WIDTH*SCALE)/2 - 60, (HEIGHT*SCALE)/2);
+//			graphics.setFont(new Font("arial", Font.BOLD, 25));
+//			if (showMessageGameOver) {
+//				graphics.drawString(">Pressione Enter para reiniciar<", (WIDTH*SCALE)/2 - 170, (HEIGHT*SCALE)/2 + 40);
+//			}
 			break;
 			
 		case "MENU":
@@ -322,7 +328,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			
 		case "GAME_OVER":
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-				restartGame = true;
+				gameOver.setRestart(true);
 			}
 		}
 		
@@ -350,9 +356,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				player.setDown(false);
 			}	
 			
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				this.restartGame = true;
-			}
 			break;
 			
 		}

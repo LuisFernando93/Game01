@@ -232,7 +232,7 @@ public class Player extends Entity{
 		if(this.life <= 0) {
 			//game over
 			life = 0;
-			Game.gameOver();
+			Game.setGameState("GAME_OVER");;
 		}
 	}
 	
