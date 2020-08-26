@@ -240,8 +240,8 @@ public class Player extends Entity{
 
 		movePlayer();
 		
-		int cameraX = Camera.clamp(this.getX() - (Game.GAME_WIDTH)/2, 0, World.WIDTH*16 - Game.GAME_WIDTH);
-		int cameraY = Camera.clamp(this.getY() - (Game.GAME_HEIGHT)/2, 0, World.HEIGHT*16 - Game.GAME_HEIGHT);
+		int cameraX = Camera.clamp(this.getX() - (Game.WIDTH)/2, 0, World.WIDTH*16 - Game.WIDTH);
+		int cameraY = Camera.clamp(this.getY() - (Game.HEIGHT)/2, 0, World.HEIGHT*16 - Game.HEIGHT);
 		Camera.setX(cameraX);
 		Camera.setY(cameraY);
 		

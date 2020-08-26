@@ -125,8 +125,8 @@ public class World {
 		int xstart = Camera.getX()/TILE_SIZE;
 		int ystart = Camera.getY()/TILE_SIZE;
 		
-		int xfinal = xstart + (Game.GAME_WIDTH/TILE_SIZE);
-		int yfinal = ystart + (Game.GAME_HEIGHT/TILE_SIZE);
+		int xfinal = xstart + (Game.WIDTH/TILE_SIZE);
+		int yfinal = ystart + (Game.HEIGHT/TILE_SIZE);
 		
 		for (int i = xstart; i <= xfinal; i++) {
 			for(int j = ystart; j <= yfinal; j++) {

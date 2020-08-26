@@ -33,9 +33,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private Thread thread;
 	private boolean isRunning = false;
 	
-	public static final int GAME_WIDTH = 240;
-	public static final int GAME_HEIGHT = 160;
-	private static final int GAME_SCALE = 3;
+	public static final int WIDTH = 240;
+	public static final int HEIGHT = 160;
+	public static final int SCALE = 3;
 	
 	private BufferedImage image;
 	
@@ -60,18 +60,20 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	private static int level = 1;
 	private static final int MAX_LEVEL = 2;
+	private Menu menu;
 	
 	public Game() {
 		random = new Random();
 		addKeyListener(this);
 		addMouseListener(this);
-		setPreferredSize(new Dimension(GAME_WIDTH*GAME_SCALE,GAME_HEIGHT*GAME_SCALE));
+		setPreferredSize(new Dimension(WIDTH*SCALE,HEIGHT*SCALE));
 		initFrame();
 		
 		//initializing objects
-		image = new BufferedImage(GAME_WIDTH,GAME_HEIGHT,BufferedImage.TYPE_INT_RGB);
+		image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 		
 		ui = new UI();
+		menu = new Menu();
 		
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
@@ -178,6 +180,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			
 			break;
 			
+		case "MENU":
+			menu.update();
+			break;
+			
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + gameState);
 		}
@@ -193,7 +199,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		Graphics graphics = image.getGraphics();
 		graphics.setColor(new Color(0,0,0));
-		graphics.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+		graphics.fillRect(0, 0, WIDTH, HEIGHT);
 		
 		world.render(graphics);
 		for (Entity entity : entities) {
@@ -207,24 +213,30 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		graphics.dispose();
 		graphics = bs.getDrawGraphics();
-		graphics.drawImage(image, 0, 0, GAME_WIDTH*GAME_SCALE, GAME_HEIGHT*GAME_SCALE, null);
+		graphics.drawImage(image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
 		graphics.setFont(new Font("arial", Font.BOLD, 20));
 		graphics.setColor(Color.white);
 		graphics.drawString("Munição: " + player.getAmmo(), 580, 20);
 		
-		if(Game.gameState == "GAME_OVER") {
+		switch (Game.gameState) {
+		
+		case "GAME_OVER":
 			Graphics2D graphics2 = (Graphics2D) graphics;
 			graphics.setFont(new Font("arial", Font.BOLD, 30));
 			graphics2.setColor(new Color(0, 0, 0, 100));
-			graphics2.fillRect(0, 0, GAME_WIDTH*GAME_SCALE, GAME_HEIGHT*GAME_SCALE);
+			graphics2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
 			graphics.setColor(Color.white);
 			graphics.setFont(new Font("arial", Font.BOLD, 30));
-			graphics.drawString("Game Over", (GAME_WIDTH*GAME_SCALE)/2 - 60, (GAME_HEIGHT*GAME_SCALE)/2);
+			graphics.drawString("Game Over", (WIDTH*SCALE)/2 - 60, (HEIGHT*SCALE)/2);
 			graphics.setFont(new Font("arial", Font.BOLD, 25));
 			if (showMessageGameOver) {
-				graphics.drawString(">Pressione Enter para reiniciar<", (GAME_WIDTH*GAME_SCALE)/2 - 170, (GAME_HEIGHT*GAME_SCALE)/2 + 40);
+				graphics.drawString(">Pressione Enter para reiniciar<", (WIDTH*SCALE)/2 - 170, (HEIGHT*SCALE)/2 + 40);
 			}
+			break;
 			
+		case "MENU":
+			menu.render(graphics);
+			break;
 		}
 		
 		bs.show();
@@ -270,49 +282,79 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
+		switch (gameState) {
+		case "NORMAL":
+			if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
 				e.getKeyCode() == KeyEvent.VK_D)  {
-			player.setRight(true);
-		} else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
+				player.setRight(true);
+			} else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
 				e.getKeyCode() == KeyEvent.VK_A) {
-			player.setLeft(true);
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_UP ||
+				player.setLeft(true);
+			}
+	
+			if(e.getKeyCode() == KeyEvent.VK_UP ||
 				e.getKeyCode() == KeyEvent.VK_W)  {
-			player.setUp(true);
-		} else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
+				player.setUp(true);
+			} else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
 				e.getKeyCode() == KeyEvent.VK_S) {
-			player.setDown(true);
+				player.setDown(true);
+			}
+	
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				player.shootKeyboard();
+			}
+			break;
+		
+		case "MENU":
+			if(e.getKeyCode() == KeyEvent.VK_UP ||
+				e.getKeyCode() == KeyEvent.VK_W)  {
+				menu.setUp(true);
+			} else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
+				e.getKeyCode() == KeyEvent.VK_S) {
+				menu.setDown(true);
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_SPACE ||
+				e.getKeyCode() == KeyEvent.VK_ENTER) {
+				menu.setEnter(true);
+			}
+			break;
+			
+		case "GAME_OVER":
+			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				restartGame = true;
+			}
 		}
 		
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			player.shootKeyboard();
-		}
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
-				e.getKeyCode() == KeyEvent.VK_D)  {
-			player.setRight(false);
-		} else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
-				e.getKeyCode() == KeyEvent.VK_A) {
-			player.setLeft(false);
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_UP ||
-				e.getKeyCode() == KeyEvent.VK_W)  {
-			player.setUp(false);
-		} else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
-				e.getKeyCode() == KeyEvent.VK_S) {
-			player.setDown(false);
-		}	
-		
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			this.restartGame = true;
+		switch (gameState) {
+		case "NORMAL":
+			
+			if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
+					e.getKeyCode() == KeyEvent.VK_D)  {
+				player.setRight(false);
+			} else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
+					e.getKeyCode() == KeyEvent.VK_A) {
+				player.setLeft(false);
+			}
+			
+			if(e.getKeyCode() == KeyEvent.VK_UP ||
+					e.getKeyCode() == KeyEvent.VK_W)  {
+				player.setUp(false);
+			} else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
+					e.getKeyCode() == KeyEvent.VK_S) {
+				player.setDown(false);
+			}	
+			
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				this.restartGame = true;
+			}
+			break;
+			
 		}
 	}
 
@@ -325,8 +367,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	@Override
 	public void mousePressed(MouseEvent e) {
 		player.shootMouse();
-		int mx = (e.getX()/GAME_SCALE);
-		int my = (e.getY()/GAME_SCALE);
+		int mx = (e.getX()/SCALE);
+		int my = (e.getY()/SCALE);
 		player.setMousePosition(mx, my);
 	}
 
