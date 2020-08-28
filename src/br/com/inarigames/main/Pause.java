@@ -5,10 +5,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-public class Menu {
+public class Pause {
 	
-	private static final String OPTION1 = "Novo jogo";
-	private static final String OPTION2 = "Carregar jogo";
+	private static final String OPTION1 = "Resumir";
+	private static final String OPTION2 = "Novo jogo";
 	private static final String OPTION3 = "Sair";
 	private String[] options = {OPTION1,OPTION2,OPTION3};
 	
@@ -29,6 +29,8 @@ public class Menu {
 	}
 	
 	public void update() {
+		
+		Game.player.setPausedState();
 		
 		if(up) {
 			up = false;
@@ -56,7 +58,8 @@ public class Menu {
 				break;
 				
 			case OPTION2:
-				System.out.println("carregar jogo");
+				Game.newGame();
+				Game.setGameState("NORMAL");
 				break;
 				
 			case OPTION3:

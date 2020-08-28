@@ -76,6 +76,13 @@ public class Player extends Entity{
 		this.down = down;
 	}
 	
+	public void setPausedState() {
+		this.right = false;
+		this.left = false;
+		this.up = false;
+		this.down = false;
+	}
+	
 	public int getLife() {
 		return this.life;
 	}

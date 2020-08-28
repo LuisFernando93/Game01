@@ -41,11 +41,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public UI ui;
 	
-	private static String gameState = "NORMAL";
-	private boolean showMessageGameOver = true;
-	private int framesGameOver = 0;
-	private final int MAX_FRAMES_GAME_OVER = 30;
-	private boolean restartGame = false;
+	private static String gameState = "MENU";
 	
 	public static World world;
 	
@@ -61,6 +57,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private static int level = 1;
 	private static final int MAX_LEVEL = 2;
 	private Menu menu;
+	private Pause pause;
 	private GameOver gameOver;
 	
 	public Game() {
@@ -75,6 +72,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		ui = new UI();
 		menu = new Menu();
+		pause = new Pause();
 		gameOver = new GameOver();
 		
 		entities = new ArrayList<Entity>();
@@ -148,7 +146,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		switch (gameState) {
 		
 		case "NORMAL":
-			this.restartGame = false;
 			for (Entity entity : entities) {
 				entity.update();
 			}
@@ -165,27 +162,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			break;
 
 		case "GAME_OVER":
-			
 			gameOver.update();
-//			this.framesGameOver++;
-//			if(this.framesGameOver == MAX_FRAMES_GAME_OVER) {
-//				this.framesGameOver = 0;
-//				if (this.showMessageGameOver) 
-//					this.showMessageGameOver = false;
-//				  else
-//					this.showMessageGameOver = true;
-//			}
-//			
-//			if(restartGame) {
-//				this.restartGame = false;
-//				Game.gameState = "NORMAL";
-//				Game.newGame();
-//			}
-			
 			break;
 			
 		case "MENU":
 			menu.update();
+			break;
+		
+		case "PAUSE":
+			pause.update();
 			break;
 			
 		default:
@@ -225,23 +210,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		switch (Game.gameState) {
 		
 		case "GAME_OVER":
-			
 			gameOver.render(graphics);
-//			Graphics2D graphics2 = (Graphics2D) graphics;
-//			graphics.setFont(new Font("arial", Font.BOLD, 30));
-//			graphics2.setColor(new Color(0, 0, 0, 100));
-//			graphics2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
-//			graphics.setColor(Color.white);
-//			graphics.setFont(new Font("arial", Font.BOLD, 30));
-//			graphics.drawString("Game Over", (WIDTH*SCALE)/2 - 60, (HEIGHT*SCALE)/2);
-//			graphics.setFont(new Font("arial", Font.BOLD, 25));
-//			if (showMessageGameOver) {
-//				graphics.drawString(">Pressione Enter para reiniciar<", (WIDTH*SCALE)/2 - 170, (HEIGHT*SCALE)/2 + 40);
-//			}
 			break;
 			
 		case "MENU":
 			menu.render(graphics);
+			break;
+		
+		case "PAUSE":
+			pause.render(graphics);
 			break;
 		}
 		
@@ -309,6 +286,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				player.shootKeyboard();
 			}
+			
+			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				Game.gameState = "PAUSE";
+			}
+			
 			break;
 		
 		case "MENU":
@@ -325,11 +307,30 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				menu.setEnter(true);
 			}
 			break;
+		
+		case "PAUSE":
+			if(e.getKeyCode() == KeyEvent.VK_UP ||
+				e.getKeyCode() == KeyEvent.VK_W)  {
+				pause.setUp(true);
+			} else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
+				e.getKeyCode() == KeyEvent.VK_S) {
+				pause.setDown(true);
+			}
 			
+			if(e.getKeyCode() == KeyEvent.VK_SPACE ||
+				e.getKeyCode() == KeyEvent.VK_ENTER) {
+				pause.setEnter(true);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				Game.gameState = "NORMAL";
+			}
+			break;
+		
 		case "GAME_OVER":
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 				gameOver.setRestart(true);
 			}
+			break;
 		}
 		
 		
