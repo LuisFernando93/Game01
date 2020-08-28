@@ -243,14 +243,17 @@ public class Player extends Entity{
 		}
 	}
 	
-	public void update() {
-
-		movePlayer();
-		
+	public void updateCamera() {
 		int cameraX = Camera.clamp(this.getX() - (Game.WIDTH)/2, 0, World.WIDTH*16 - Game.WIDTH);
 		int cameraY = Camera.clamp(this.getY() - (Game.HEIGHT)/2, 0, World.HEIGHT*16 - Game.HEIGHT);
 		Camera.setX(cameraX);
 		Camera.setY(cameraY);
+	}
+	
+	public void update() {
+
+		movePlayer();
+		updateCamera();
 		
 		checkCollisionItems();
 		checkIfWillShoot();

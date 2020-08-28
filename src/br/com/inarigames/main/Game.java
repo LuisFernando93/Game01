@@ -61,6 +61,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private GameOver gameOver;
 	
 	public Game() {
+		Sound.musicBackgrond.play();
 		random = new Random();
 		addKeyListener(this);
 		addMouseListener(this);

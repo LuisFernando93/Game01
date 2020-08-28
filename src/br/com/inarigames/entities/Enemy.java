@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import br.com.inarigames.main.Game;
+import br.com.inarigames.main.Sound;
 import br.com.inarigames.world.Camera;
 import br.com.inarigames.world.World;
 
@@ -118,6 +119,7 @@ public class Enemy extends Entity{
 			if(!Game.player.isDamaged) { //only damages if not damaged, giving it immortality frames
 				if(Game.random.nextInt(100) < 10) { //10% of chance to take damage
 					Game.player.setLife(Game.player.getLife() -  power);
+					Sound.hurtEffect.play();
 					Game.player.isDamaged = true;
 				}
 			}
@@ -127,6 +129,7 @@ public class Enemy extends Entity{
 	private void checkIfIsDamaged() {
 		if (isCollidingWithProjectile()) {
 			isDamaged = true;
+			Sound.musicBackgrond.play();
 			this.life -= Projectile.getPower();	
 			this.damageFrames = 0;
 		}
