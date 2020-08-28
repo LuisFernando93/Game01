@@ -129,7 +129,7 @@ public class Enemy extends Entity{
 	private void checkIfIsDamaged() {
 		if (isCollidingWithProjectile()) {
 			isDamaged = true;
-			Sound.musicBackgrond.play();
+			Sound.hurtEffect.play();
 			this.life -= Projectile.getPower();	
 			this.damageFrames = 0;
 		}
