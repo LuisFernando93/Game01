@@ -63,7 +63,7 @@ public class Pause {
 				break;
 				
 			case OPTION3:
-				System.out.println("sair");
+				Game.closeGame();
 				break;
 			}
 		}

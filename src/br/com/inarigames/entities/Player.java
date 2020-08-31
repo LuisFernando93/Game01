@@ -1,5 +1,6 @@
 package br.com.inarigames.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -10,7 +11,7 @@ import br.com.inarigames.world.World;
 
 public class Player extends Entity{
 	
-	private boolean right, left, up, down;
+	private boolean right, left, up, down, jump;
 	private int speed = 2;
 	
 	private int frames = 0, maxFrames = 5, imageIndex = 0, maxIndex = 3;
@@ -47,6 +48,11 @@ public class Player extends Entity{
 	
 	private int mx, my;
 	
+	private boolean jumpUp, jumpDown;
+	
+	private boolean isJumping = false;
+	private int jumpFrames = 30, jumpCur = 0, jumpSpeed = 2;
+	
 
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -74,6 +80,14 @@ public class Player extends Entity{
 	
 	public void setDown(boolean down) {
 		this.down = down;
+	}
+	
+	public void setJump(boolean jump) {
+		this.jump = jump;
+	}
+	
+	public int getZ() {
+		return this.z;
 	}
 	
 	public void setPausedState() {
@@ -235,12 +249,44 @@ public class Player extends Entity{
 		}
 	}
 	
+	private void checkIfJump() {
+		
+		if (jump) {
+			jump = false;
+			if (isJumping == false) {
+				isJumping = true;
+				jumpUp = true;
+			}
+		}
+	
+		if (isJumping) {
+			if (jumpUp) {
+				jumpCur += jumpSpeed;
+				if (jumpCur >= jumpFrames) {
+					jumpUp = false;
+					jumpDown = true;
+				}
+			} else if (jumpDown) {
+				jumpCur -= jumpSpeed;
+				if (jumpCur <= 0) {
+					jumpDown = false;
+					isJumping = false;
+				}
+			}
+			z = jumpCur;
+		}
+	}
+	
 	private void checkLife() {
 		if(this.life <= 0) {
 			//game over
 			life = 0;
 			Game.setGameState("GAME_OVER");;
 		}
+	}
+	
+	private int offsetZ(int y) {
+		return y - this.z;
 	}
 	
 	public void updateCamera() {
@@ -251,13 +297,14 @@ public class Player extends Entity{
 	}
 	
 	public void update() {
-
+	
 		movePlayer();
 		updateCamera();
 		
 		checkCollisionItems();
 		checkIfWillShoot();
 		checkIfIsDamaged();
+		checkIfJump();
 		checkLife();
 		
 	}
@@ -265,29 +312,34 @@ public class Player extends Entity{
 	public void render(Graphics graphics) {
 		if(!isDamaged) {
 			if(direction == right_dir) {
-				graphics.drawImage(rightPlayer[imageIndex], Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
+				graphics.drawImage(rightPlayer[imageIndex], Camera.offsetCameraX(this.x), Camera.offsetCameraY(offsetZ(this.y)), null);
 				if(hasWeapon) {
-					graphics.drawImage(bowRight, Camera.offsetCameraX(this.x) + 5, Camera.offsetCameraY(this.y) + 2, null);
+					graphics.drawImage(bowRight, Camera.offsetCameraX(this.x) + 5, Camera.offsetCameraY(offsetZ(this.y)) + 2, null);
 				}
 			} else if(direction == left_dir) {
-				graphics.drawImage(leftPlayer[imageIndex], Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
+				graphics.drawImage(leftPlayer[imageIndex], Camera.offsetCameraX(this.x), Camera.offsetCameraY(offsetZ(this.y)), null);
 				if(hasWeapon) {
-					graphics.drawImage(bowLeft, Camera.offsetCameraX(this.x) - 5, Camera.offsetCameraY(this.y) + 2, null);
+					graphics.drawImage(bowLeft, Camera.offsetCameraX(this.x) - 5, Camera.offsetCameraY(offsetZ(this.y)) + 2, null);
 				}
 			} 
 		} else {
 			if(direction == right_dir) {
-				graphics.drawImage(blankPlayerRight, Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
+				graphics.drawImage(blankPlayerRight, Camera.offsetCameraX(this.x), Camera.offsetCameraY(offsetZ(this.y)), null);
 				if(hasWeapon) {
-					graphics.drawImage(blankBowRight, Camera.offsetCameraX(this.x) + 5, Camera.offsetCameraY(this.y) + 2, null);
+					graphics.drawImage(blankBowRight, Camera.offsetCameraX(this.x) + 5, Camera.offsetCameraY(offsetZ(this.y)) + 2, null);
 				}
 				
 			} else if(direction == left_dir) {
-				graphics.drawImage(blankPlayerLeft, Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
+				graphics.drawImage(blankPlayerLeft, Camera.offsetCameraX(this.x), Camera.offsetCameraY(offsetZ(this.y)), null);
 				if(hasWeapon) {
-					graphics.drawImage(blankBowLeft, Camera.offsetCameraX(this.x) - 5, Camera.offsetCameraY(this.y) + 2, null);
+					graphics.drawImage(blankBowLeft, Camera.offsetCameraX(this.x) - 5, Camera.offsetCameraY(offsetZ(this.y)) + 2, null);
 				}
 			} 
+		}
+		
+		if (isJumping) {
+			graphics.setColor(Color.black);
+			graphics.fillOval(Camera.offsetCameraX(this.x) + 4, Camera.offsetCameraY(this.y) + 8, 8, 8);
 		}
 	}
 }

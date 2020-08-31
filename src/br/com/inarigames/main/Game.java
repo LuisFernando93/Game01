@@ -61,7 +61,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private GameOver gameOver;
 	
 	public Game() {
-		Sound.musicBackground.loop();
+		//Sound.musicBackground.loop();
 		random = new Random();
 		addKeyListener(this);
 		addMouseListener(this);
@@ -126,6 +126,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		World.newWorld("level" + level + ".png");
 		return;
 		
+	}
+	
+	public static void closeGame() {
+		frame.setVisible(false);
+		frame.dispose();
+		System.exit(0);
 	}
 	
 	private void checkEnemies() {
@@ -286,6 +292,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				player.shootKeyboard();
+			}
+			
+			if (e.getKeyCode() == KeyEvent.VK_Z) {
+				player.setJump(true);
 			}
 			
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

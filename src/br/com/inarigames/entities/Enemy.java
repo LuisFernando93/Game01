@@ -53,8 +53,10 @@ public class Enemy extends Entity{
 	public boolean isCollidingWithPlayer() {
 		Rectangle enemyCurrent = new Rectangle(this.x+maskx,this.y+masky,maskw,maskh);
 		Rectangle player = new Rectangle(Game.player.getX(), Game.player.getY(), 16, 16);
-		
-		return enemyCurrent.intersects(player);
+		if (enemyCurrent.intersects(player) && this.z == Game.player.z) {
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean isCollidingWithProjectile() {
