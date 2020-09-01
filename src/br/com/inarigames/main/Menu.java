@@ -57,6 +57,8 @@ public class Menu {
 				
 			case OPTION2:
 				System.out.println("carregar jogo");
+				GameFile.loadGame(Game.getEncode());
+				Game.setGameState("NORMAL");
 				break;
 				
 			case OPTION3:

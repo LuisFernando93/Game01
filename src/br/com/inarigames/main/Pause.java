@@ -9,8 +9,10 @@ public class Pause {
 	
 	private static final String OPTION1 = "Resumir";
 	private static final String OPTION2 = "Novo jogo";
-	private static final String OPTION3 = "Sair";
-	private String[] options = {OPTION1,OPTION2,OPTION3};
+	private static final String OPTION3 = "Salvar";
+	private static final String OPTION4 = "Carregar jogo";
+	private static final String OPTION5 = "Sair";
+	private String[] options = {OPTION1,OPTION2,OPTION4,OPTION3,OPTION5};
 	
 	private int currentOption = 0;
 	private final int MAX_OPTION = options.length - 1;
@@ -63,6 +65,16 @@ public class Pause {
 				break;
 				
 			case OPTION3:
+				GameFile.saveGame(Game.getEncode());
+				break;
+				
+			case OPTION4:
+				System.out.println("carregar jogo");
+				GameFile.loadGame(Game.getEncode());
+				Game.setGameState("NORMAL");
+				break;
+			
+			case OPTION5:
 				Game.closeGame();
 				break;
 			}

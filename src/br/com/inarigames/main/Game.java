@@ -59,6 +59,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private Menu menu;
 	private Pause pause;
 	private GameOver gameOver;
+	private static int encode = 10;
 	
 	public Game() {
 		//Sound.musicBackground.loop();
@@ -84,6 +85,18 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		world = new World("/level1.png");
 		
+	}
+	
+	public static int getLevel() {
+		return Game.level;
+	}
+	
+	public static void setLevel(int spl2) {
+		Game.level = spl2;
+	}
+	
+	public static int getEncode() {
+		return Game.encode;
 	}
 	
 	public static void setGameState(String gameState) {
