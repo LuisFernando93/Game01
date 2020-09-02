@@ -59,10 +59,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private Menu menu;
 	private Pause pause;
 	private GameOver gameOver;
-	private static int encode = 10;
 	
 	public Game() {
-		//Sound.musicBackground.loop();
+		Sound.musicBackground.loop();
 		random = new Random();
 		addKeyListener(this);
 		addMouseListener(this);
@@ -93,10 +92,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static void setLevel(int spl2) {
 		Game.level = spl2;
-	}
-	
-	public static int getEncode() {
-		return Game.encode;
 	}
 	
 	public static void setGameState(String gameState) {

@@ -12,7 +12,7 @@ import br.com.inarigames.world.World;
 
 public class GameFile {
 	
-	private static void save(String[] val1, int[] val2, int encode) {
+	private static void save(String[] val1, int[] val2) {
 		
 		BufferedWriter write = null;
 		try {
@@ -20,11 +20,8 @@ public class GameFile {
 			for (int i = 0; i < val1.length; i++) {
 				String current = val1[i];
 				current += ":";
-				char[] value = Integer.toString(val2[i]).toCharArray();
-				for (int j = 0; j < value.length; j++) {
-					value[j] += encode;
-					current += value[j];
-				}
+				current += Integer.toString(val2[i]);
+				current = Encoder.encode(current);
 				try {
 					write.write(current);
 					if (i < val1.length - 1)
@@ -45,7 +42,7 @@ public class GameFile {
 		System.out.println("jogo salvo com sucesso");
 	}
 	
-	private static String load(int encode) {
+	private static String load() {
 		String line = "";
 		File file = new File("save.txt");
 		if (file.exists()) {
@@ -54,16 +51,8 @@ public class GameFile {
 				BufferedReader reader = new BufferedReader(new FileReader("save.txt"));
 				try {
 					while((singleLine = reader.readLine()) != null) {
-						String[] data = singleLine.split(":");
-						char[] value = data[1].toCharArray();
-						data[1] = "";
-						for (int i = 0; i < value.length; i++) {
-							value[i]-=encode;
-							data[1] += value[i];  
-						}
-						line+=data[0];
-						line+=":";
-						line+=data[1];
+						String data = Encoder.decode(singleLine);
+						line+=data;
 						line+="/";
 					}
 				} catch (IOException e) {
@@ -77,14 +66,19 @@ public class GameFile {
 		return line;
 	}
 	
-	public static void saveGame(int encode) {
-		String[] opt1 = {"level"};
-		int[] op2 = {Game.getLevel()};
-		GameFile.save(opt1, op2, encode);
+	public static void deleteSave() {
+		File file = new File("save.txt");
+		file.delete();
 	}
 	
-	public static void loadGame(int encode) {
-		String str = GameFile.load(encode);
+	public static void saveGame() {
+		String[] opt1 = {"level","life"};
+		int[] op2 = {Game.getLevel(),Game.player.getLife()};
+		GameFile.save(opt1, op2);
+	}
+	
+	public static void loadGame() {
+		String str = GameFile.load();
 		String[] spl = str.split("/");
 		for (int i = 0; i < spl.length; i++) {
 			String[] spl2 = spl[i].split(":");
