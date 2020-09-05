@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import br.com.inarigames.system.GameFile;
+
 public class Pause {
 	
 	private static final String OPTION1 = "Resumir";
@@ -65,13 +67,14 @@ public class Pause {
 				break;
 				
 			case OPTION3:
-				System.out.println("carregar jogo");
-				GameFile.loadGame();
-				Game.setGameState("NORMAL");
+				if (GameFile.loadGame()) 
+					Game.setGameState("NORMAL");
 				break;
 				
 			case OPTION4:
-				GameFile.saveGame();
+				if (GameFile.saveGame()) {
+					System.out.println("jogo salvo");
+				}
 				break;
 			
 			case OPTION5:

@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import br.com.inarigames.system.GameFile;
+
 public class Menu {
 	
 	private static final String OPTION1 = "Novo jogo";
@@ -56,8 +58,8 @@ public class Menu {
 				break;
 				
 			case OPTION2:
-				GameFile.loadGame();
-				Game.setGameState("NORMAL");
+				if (GameFile.loadGame()) 
+					Game.setGameState("NORMAL");
 				break;
 				
 			case OPTION3:

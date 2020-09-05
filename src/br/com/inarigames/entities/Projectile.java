@@ -9,17 +9,18 @@ import br.com.inarigames.world.World;
 
 public class Projectile extends Entity{
 	
-	private double dx, dy;
+	private double rad, dx, dy;
 	private double speed = 3;
 	private final static int MAX_FLY_TIME = 50;
-	int flyTime = 0;
+	private int flyTime = 0;
 	private final static int POWER = 5;
 	
 
-	public Projectile(int x, int y, int width, int height, double dx, double dy) {
+	public Projectile(double x, double y, int width, int height, double rad) {
 		super(x, y, width, height);
-		this.dx = dx;
-		this.dy = dy;
+		this.rad = rad;
+		
+		
 	}
 	
 	public static int getPower() {
@@ -28,6 +29,8 @@ public class Projectile extends Entity{
 
 	public void update() {
 		
+		this.dx = Math.cos(rad);
+		this.dy = Math.sin(rad);
 		this.x += dx*speed;
 		this.y += dy*speed;
 
@@ -39,6 +42,6 @@ public class Projectile extends Entity{
 	
 	public void render(Graphics graphics) {
 		graphics.setColor(Color.BLUE);
-		graphics.fillOval(Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), width, height);
+		graphics.fillOval(Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(this.getY()), width, height);
 	}
 }

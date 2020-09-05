@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import br.com.inarigames.main.Game;
-import br.com.inarigames.main.Sound;
+import br.com.inarigames.system.Sound;
 import br.com.inarigames.world.Camera;
 import br.com.inarigames.world.World;
 
@@ -51,7 +51,7 @@ public class Enemy extends Entity{
 	}
 	
 	public boolean isCollidingWithPlayer() {
-		Rectangle enemyCurrent = new Rectangle(this.x+maskx,this.y+masky,maskw,maskh);
+		Rectangle enemyCurrent = new Rectangle(this.getX()+maskx,this.getY()+masky,maskw,maskh);
 		Rectangle player = new Rectangle(Game.player.getX(), Game.player.getY(), 16, 16);
 		if (enemyCurrent.intersects(player) && this.z == Game.player.z) {
 			return true;
@@ -60,9 +60,9 @@ public class Enemy extends Entity{
 	}
 	
 	public boolean isCollidingWithProjectile() {
-		Rectangle enemyCurrent = new Rectangle(this.x+maskx,this.y+masky,maskw,maskh);
+		Rectangle enemyCurrent = new Rectangle(this.getX()+maskx,this.getY()+masky,maskw,maskh);
 		for (Projectile projectile : Game.projectiles) {
-			Rectangle projectileRect = new Rectangle(projectile.getX(), projectile.y, projectile.getWidth(), projectile.getHeight());
+			Rectangle projectileRect = new Rectangle(projectile.getX(), projectile.getY(), projectile.getWidth(), projectile.getHeight());
 			if (enemyCurrent.intersects(projectileRect)) {
 				//inimigo atingido
 				Game.toRemove.add(projectile);
@@ -89,19 +89,19 @@ public class Enemy extends Entity{
 		if(!isCollidingWithPlayer()) {
 			if(Game.random.nextInt(100) < moveChance) {
 				
-				if (this.x < Game.player.getX() && World.isFree(this.x+speed, this.y) 
-						&& !isColliding(this.x+speed, this.y)) {
+				if (this.x < Game.player.getX() && World.isFree(this.getX()+speed, this.getY()) 
+						&& !isColliding(this.getX()+speed, this.getY())) {
 					x+=speed;
-				} else if (this.x > Game.player.getX() && World.isFree(this.x-speed, this.y) 
-						&& !isColliding(this.x-speed, this.y)) {
+				} else if (this.x > Game.player.getX() && World.isFree(this.getX()-speed, this.getY()) 
+						&& !isColliding(this.getX()-speed, this.getY())) {
 					x-=speed;
 				}
 				
-				if (this.y < Game.player.getY() && World.isFree(this.x, this.y+speed) 
-						&& !isColliding(this.x, this.y+speed)) {
+				if (this.y < Game.player.getY() && World.isFree(this.getX(), this.getY()+speed) 
+						&& !isColliding(this.getX(), this.getY()+speed)) {
 					y+=speed;
-				} else if (this.y > Game.player.getY() && World.isFree(this.x, this.y-speed) 
-						&& !isColliding(this.x, this.y-speed)) {
+				} else if (this.y > Game.player.getY() && World.isFree(this.getX(), this.getY()-speed) 
+						&& !isColliding(this.getX(), this.getY()-speed)) {
 					y-=speed;
 				}
 				
@@ -156,9 +156,9 @@ public class Enemy extends Entity{
 	public void render(Graphics graphics) {
 		
 		if (!isDamaged) {
-			graphics.drawImage(enemySprites[imageIndex], Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
+			graphics.drawImage(enemySprites[imageIndex], Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(this.getY()), null);
 		} else {
-			graphics.drawImage(damagedEnemySprite, Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
+			graphics.drawImage(damagedEnemySprite, Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(this.getY()), null);
 		}
 		
 	}

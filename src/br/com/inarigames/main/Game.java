@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -24,10 +25,11 @@ import br.com.inarigames.entities.Player;
 import br.com.inarigames.entities.Projectile;
 import br.com.inarigames.graphics.Spritesheet;
 import br.com.inarigames.graphics.UI;
+import br.com.inarigames.system.Sound;
 import br.com.inarigames.world.Camera;
 import br.com.inarigames.world.World;
 
-public class Game extends Canvas implements Runnable, KeyListener, MouseListener{
+public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener{
 	
 	public static JFrame frame;
 	private Thread thread;
@@ -60,11 +62,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private Pause pause;
 	private GameOver gameOver;
 	
+	private static int mx, my;
+	
 	public Game() {
 		Sound.musicBackground.loop();
 		random = new Random();
 		addKeyListener(this);
 		addMouseListener(this);
+		addMouseMotionListener(this);
 		setPreferredSize(new Dimension(WIDTH*SCALE,HEIGHT*SCALE));
 		initFrame();
 		
@@ -96,6 +101,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static void setGameState(String gameState) {
 		Game.gameState = gameState;
+	}
+	
+	public static int getMouseX() {
+		return Game.mx;
+	}
+	
+	public static int getMouseY() {
+		return Game.my;
 	}
 	
 	public static void main(String[] args) {
@@ -390,9 +403,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	@Override
 	public void mousePressed(MouseEvent e) {
 		player.shootMouse();
-		int mx = (e.getX()/SCALE);
-		int my = (e.getY()/SCALE);
-		player.setMousePosition(mx, my);
 	}
 
 	@Override
@@ -411,5 +421,17 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		this.mx = e.getX()/SCALE;
+		this.my = e.getY()/SCALE;
 	}
 }

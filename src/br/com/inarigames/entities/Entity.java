@@ -16,11 +16,12 @@ public class Entity {
 	protected static BufferedImage ENEMY_EN2 = Game.spritesheet.getSprite(8*16, 16, 16, 16);
 	protected static BufferedImage BLANK_ENEMY_EN = Game.spritesheet.getSprite(9*16, 16, 16, 16);
 	
-	protected int x, y, z, width, height;
+	protected int z, width, height;
+	protected double x, y;
 	protected BufferedImage sprite;
 	private int maskx, masky, mwidth, mheight;
 	
-	public Entity(int x, int y, int width, int height) {
+	public Entity(double x, double y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.z = 0;
@@ -34,11 +35,11 @@ public class Entity {
 	}
 	
 	public int getX() {
-		return this.x;
+		return (int)this.x;
 	}
 	
 	public int getY() {
-		return this.y;
+		return (int)this.y;
 	}
 	
 	public int getWidth() {
@@ -78,6 +79,6 @@ public class Entity {
 	}
 	
 	public void render(Graphics graphics) {
-		graphics.drawImage(sprite, Camera.offsetCameraX(this.x), Camera.offsetCameraY(this.y), null);
+		graphics.drawImage(sprite, Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(this.getY()), null);
 	}
 }

@@ -1,4 +1,4 @@
-package br.com.inarigames.main;
+package br.com.inarigames.system;
 
 import java.io.*;
 import javax.sound.sampled.*;
