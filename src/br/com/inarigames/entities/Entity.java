@@ -74,6 +74,12 @@ public class Entity {
 		return false;
 	}
 	
+	public double calculateDistance(int x1, int y1, int x2, int y2) {
+		double x = Math.pow(x1 - x2, 2);
+		double y = Math.pow(y1 - y2, 2);
+		return Math.sqrt(x + y);
+	}
+	
 	public void update() {
 		
 	}

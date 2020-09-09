@@ -85,6 +85,22 @@ public class Enemy extends Entity{
 		}
 	}
 	
+	private void checkIfMove() {
+		
+		if(calculateDistance(this.getX(), this.getY(), Game.player.getX(), Game.player.getY()) < 160) {
+			moveAndAttack();
+		}
+		
+		frames++;
+		if(frames == maxFrames) {
+			frames = 0;
+			imageIndex++;
+			if(imageIndex > maxIndex) {
+				imageIndex = 0;
+			}
+		}
+	}
+	
 	private void moveAndAttack() {
 		if(!isCollidingWithPlayer()) {
 			if(Game.random.nextInt(100) < moveChance) {
@@ -103,16 +119,6 @@ public class Enemy extends Entity{
 				} else if (this.y > Game.player.getY() && World.isFree(this.getX(), this.getY()-speed) 
 						&& !isColliding(this.getX(), this.getY()-speed)) {
 					y-=speed;
-				}
-				
-				
-				frames++;
-				if(frames == maxFrames) {
-					frames = 0;
-					imageIndex++;
-					if(imageIndex > maxIndex) {
-						imageIndex = 0;
-					}
 				}
 				
 			}
@@ -147,7 +153,7 @@ public class Enemy extends Entity{
 	public void update() {
 		
 		checkIfPlayerMoved();
-		moveAndAttack();
+		checkIfMove();
 		checkIfIsDamaged();
 		checkLife();
 		

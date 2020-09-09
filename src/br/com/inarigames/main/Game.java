@@ -65,7 +65,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private static int mx, my;
 	
 	public Game() {
-		Sound.musicBackground.loop();
+		
+		//Sound.musicBackground.loop();
 		random = new Random();
 		addKeyListener(this);
 		addMouseListener(this);
@@ -431,7 +432,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		this.mx = e.getX()/SCALE;
-		this.my = e.getY()/SCALE;
+		Game.mx = e.getX()/SCALE;
+		Game.my = e.getY()/SCALE;
 	}
 }
