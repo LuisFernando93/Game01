@@ -13,6 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -25,6 +26,7 @@ import br.com.inarigames.entities.Player;
 import br.com.inarigames.entities.Projectile;
 import br.com.inarigames.graphics.Spritesheet;
 import br.com.inarigames.graphics.UI;
+import br.com.inarigames.system.Light;
 import br.com.inarigames.system.Sound;
 import br.com.inarigames.world.Camera;
 import br.com.inarigames.world.World;
@@ -61,6 +63,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private Menu menu;
 	private Pause pause;
 	private GameOver gameOver;
+	private Light light;
+	
+	private static int[] pixels;
 	
 	private static int mx, my;
 	
@@ -82,6 +87,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		pause = new Pause();
 		gameOver = new GameOver();
 		
+		pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+		light = new Light();
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
 		projectiles = new ArrayList<Projectile>();
@@ -110,6 +117,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static int getMouseY() {
 		return Game.my;
+	}
+	
+	public static void setPixel(int i, int value) {
+		pixels[i] = value;
 	}
 	
 	public static void main(String[] args) {
@@ -226,6 +237,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		for (Projectile projectile: projectiles) {
 			projectile.render(graphics);
 		}
+		
+		light.applyLight();
 		
 		ui.render(graphics);
 		
