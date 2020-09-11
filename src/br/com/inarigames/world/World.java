@@ -89,6 +89,10 @@ public class World {
 		}
 	}
 	
+	public static Tile[][] getTiles() {
+		return World.tiles;
+	}
+ 	
 	public static void newWorld(String world) {
 		Game.entities = new ArrayList<Entity>();
 		Game.enemies = new ArrayList<Enemy>();
