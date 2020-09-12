@@ -12,9 +12,9 @@ public class AStar {
 		
 		@Override
 		public int compare(Node n0, Node n1) {
-			if (n0.getFCost() > n1.getFCost())
-				return 1;
-			if (n0.getFCost() < n1.getFCost())
+			if (n1.getFCost() < n0.getFCost())
+				return + 1;
+			if (n1.getFCost() > n0.getFCost())
 				return -1;
 			return 0;
 		}
@@ -68,54 +68,54 @@ public class AStar {
 			openList.remove(current);
 			closedList.add(current);
 			
-			for (int i = 0; i < 3; i++) {
-				for (int j = 0; j < 3; j++) {
-					if (i == 1 && j == 1) continue;
-					int x = current.getTile().getX();
-					int y = current.getTile().getY();
-					Tile tile = World.getTiles()[i+x][j+y];
-					if (tile == null) continue;
-					if (tile instanceof WallTile) continue;
-					if (i == 0 && j == 0) {
-						Tile test = World.getTiles()[i+x+1][j+y];
-						Tile test2 = World.getTiles()[i+x+1][j+y];
-						if (test instanceof WallTile || test2 instanceof WallTile) {
-							continue;
-						}
-					} else if (i == 2 && j == 0) {
-						Tile test = World.getTiles()[i+x+1][j+y];
-						Tile test2 = World.getTiles()[i+x][j+y];
-						if (test instanceof WallTile || test2 instanceof WallTile) {
-							continue;
-						}
-					} else if (i == 0 && j == 2) {
-						Tile test = World.getTiles()[i+x][j+y-1];
-						Tile test2 = World.getTiles()[i+x+1][j+y];
-						if (test instanceof WallTile || test2 instanceof WallTile) {
-							continue;
-						}
-					} else if (i == 2 && j == 2) {
-						Tile test = World.getTiles()[i+x][j+y-1];
-						Tile test2 = World.getTiles()[i+x-1][j+y];
-						if (test instanceof WallTile || test2 instanceof WallTile) {
-							continue;
-						}
+			for (int i = 0; i < 9; i++) {
+				if (i == 4) continue;
+				int x = current.getTile().getX();
+				int y = current.getTile().getY();
+				int xi = (i%3) - 1;
+				int yi = (i/3) - 1;
+				Tile tile = World.getTiles()[xi+x][yi+y];
+				if (tile == null) continue;
+				if (tile instanceof WallTile) continue;
+				if (i == 0) {
+					Tile test = World.getTiles()[xi+x+1][yi+y];
+					Tile test2 = World.getTiles()[xi+x][yi+y+1];
+					if (test instanceof WallTile || test2 instanceof WallTile) {
+						continue;
 					}
-					
-					Vector2i a = new Vector2i(x+i,y+i);
-					double gCost = current.getGCost() + getDistance(current.getTile(), a);
-					double hCost = getDistance(a, end);
-					
-					Node node = new Node(a, current, gCost, hCost);
-					if (vectorInList(closedList, a) && gCost >= current.getGCost()) continue;
-					
-					if (!vectorInList(openList, a)) {
-						openList.add(node);
-					} else if (gCost < current.getGCost()) {
-						openList.remove(current);
-						openList.add(node);
+				} else if (i == 2) {
+					Tile test = World.getTiles()[xi+x-1][yi+y];
+					Tile test2 = World.getTiles()[xi+x][yi+y+1];
+					if (test instanceof WallTile || test2 instanceof WallTile) {
+						continue;
 					}
-				} 	
+				} else if (i == 6) {
+					Tile test = World.getTiles()[xi+x][yi+y-1];
+					Tile test2 = World.getTiles()[xi+x+1][yi+y];
+					if (test instanceof WallTile || test2 instanceof WallTile) {
+						continue;
+					}
+				} else if (i == 8) {
+					Tile test = World.getTiles()[xi+x][yi+y-1];
+					Tile test2 = World.getTiles()[xi+x-1][yi+y];
+					if (test instanceof WallTile || test2 instanceof WallTile) {
+						continue;
+					}
+				}
+				
+				Vector2i a = new Vector2i(x+xi,y+yi);
+				double gCost = current.getGCost() + getDistance(current.getTile(), a);
+				double hCost = getDistance(a, end);
+				
+				Node node = new Node(a, current, gCost, hCost);
+				if (vectorInList(closedList, a) && gCost >= current.getGCost()) continue;
+				
+				if (!vectorInList(openList, a)) {
+					openList.add(node);
+				} else if (gCost < current.getGCost()) {
+					openList.remove(current);
+					openList.add(node);
+				}	
 			}
 		}
 		

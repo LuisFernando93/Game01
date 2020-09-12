@@ -42,6 +42,6 @@ public class Projectile extends Entity{
 	
 	public void render(Graphics graphics) {
 		graphics.setColor(Color.BLUE);
-		graphics.fillOval(Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(this.getY()), width, height);
+		graphics.fillOval(Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), width, height);
 	}
 }

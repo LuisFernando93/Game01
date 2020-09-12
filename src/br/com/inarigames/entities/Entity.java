@@ -3,9 +3,12 @@ package br.com.inarigames.entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import br.com.inarigames.main.Game;
 import br.com.inarigames.world.Camera;
+import br.com.inarigames.world.Node;
+import br.com.inarigames.world.Vector2i;
 
 public class Entity {
 
@@ -85,6 +88,6 @@ public class Entity {
 	}
 	
 	public void render(Graphics graphics) {
-		graphics.drawImage(sprite, Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(this.getY()), null);
+		graphics.drawImage(sprite, Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
 	}
 }

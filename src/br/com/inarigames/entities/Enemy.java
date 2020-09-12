@@ -1,12 +1,18 @@
 package br.com.inarigames.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.List;
+import java.util.Random;
 
 import br.com.inarigames.main.Game;
 import br.com.inarigames.system.Sound;
+import br.com.inarigames.world.AStar;
 import br.com.inarigames.world.Camera;
+import br.com.inarigames.world.Node;
+import br.com.inarigames.world.Vector2i;
 import br.com.inarigames.world.World;
 
 public class Enemy extends Entity{
@@ -26,6 +32,8 @@ public class Enemy extends Entity{
 	private BufferedImage damagedEnemySprite;
 	
 	private boolean isDamaged = false;
+	
+	private List<Node> path;
 
 	public Enemy(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -73,6 +81,29 @@ public class Enemy extends Entity{
 		return false;
 	}
 	
+	private void followPath(List<Node> path) {
+		if(path != null) {
+			if (path.size() > 0) {
+				Vector2i target = path.get(path.size() - 1).getTile();
+				if (this.x < target.getX() * World.TILE_SIZE) {
+					this.x += speed;
+				} else if (this.x > target.getX() * World.TILE_SIZE) {
+					this.x -= speed;
+				}
+				
+				if (this.y < target.getY() * World.TILE_SIZE) {
+					this.y += speed;
+				} else if (this.y > target.getY() * World.TILE_SIZE) {
+					this.y -= speed;
+				}
+				
+				if(this.getX() == target.getX() * World.TILE_SIZE && this.getY() == target.getY() * World.TILE_SIZE) {
+					path.remove(path.size() - 1);
+				}
+			}
+		}
+	}
+	
 	private void checkIfPlayerMoved() {
 		if(Game.player.movedOnce) {
 			speed = 1;
@@ -88,7 +119,7 @@ public class Enemy extends Entity{
 	private void checkIfMove() {
 		
 		if(calculateDistance(this.getX(), this.getY(), Game.player.getX(), Game.player.getY()) < 160) {
-			moveAndAttack();
+			moveAStar();
 		}
 		
 		frames++;
@@ -101,7 +132,36 @@ public class Enemy extends Entity{
 		}
 	}
 	
-	private void moveAndAttack() {
+	private void moveAStar() {
+		if (path == null || path.size() == 0) {
+			Vector2i start = new Vector2i(this.getX()/World.TILE_SIZE, this.getY()/World.TILE_SIZE);
+			Vector2i end = new Vector2i(Game.player.getX()/World.TILE_SIZE, Game.player.getY()/World.TILE_SIZE);
+			path = AStar.findPath(Game.world, start, end);
+		}
+		if (new Random().nextInt(100) < 90) {
+			followPath(path);
+		}
+		if (new Random().nextInt(100) < 10) {
+			Vector2i start = new Vector2i(this.getX()/16, this.getY()/16);
+			Vector2i end = new Vector2i(Game.player.getX()/16, Game.player.getY()/16);
+			path = AStar.findPath(Game.world, start, end);
+		}
+		
+	}
+	
+	private void checkIfAttack() {
+		if(isCollidingWithPlayer()) {
+			if(!Game.player.isDamaged) { //only damages if not damaged, giving it immortality frames
+				if(Game.random.nextInt(100) < 10) { //10% of chance to take damage
+					Game.player.setLife(Game.player.getLife() -  power);
+					Sound.hurtEffect.play();
+					Game.player.isDamaged = true;
+				}
+			}
+		}
+	}
+	
+	private void move() {
 		if(!isCollidingWithPlayer()) {
 			if(Game.random.nextInt(100) < moveChance) {
 				
@@ -121,15 +181,6 @@ public class Enemy extends Entity{
 					y-=speed;
 				}
 				
-			}
-		} else {
-			//ataque
-			if(!Game.player.isDamaged) { //only damages if not damaged, giving it immortality frames
-				if(Game.random.nextInt(100) < 10) { //10% of chance to take damage
-					Game.player.setLife(Game.player.getLife() -  power);
-					Sound.hurtEffect.play();
-					Game.player.isDamaged = true;
-				}
 			}
 		}
 	}
@@ -154,6 +205,7 @@ public class Enemy extends Entity{
 		
 		checkIfPlayerMoved();
 		checkIfMove();
+		checkIfAttack();
 		checkIfIsDamaged();
 		checkLife();
 		
@@ -162,10 +214,11 @@ public class Enemy extends Entity{
 	public void render(Graphics graphics) {
 		
 		if (!isDamaged) {
-			graphics.drawImage(enemySprites[imageIndex], Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(this.getY()), null);
+			graphics.drawImage(enemySprites[imageIndex], Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
 		} else {
-			graphics.drawImage(damagedEnemySprite, Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(this.getY()), null);
+			graphics.drawImage(damagedEnemySprite, Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
 		}
-		
+//		graphics.setColor(Color.BLUE);
+//		graphics.fillRect(Camera.offsetX(this.getX() + maskx), Camera.offsetY(this.getY() + masky), maskw, maskh);
 	}
 }

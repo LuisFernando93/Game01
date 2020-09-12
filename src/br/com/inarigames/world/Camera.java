@@ -20,11 +20,11 @@ public class Camera {
 		Camera.y = y;
 	}
 	
-	public static int offsetCameraX(int x) {
+	public static int offsetX(int x) {
 		return x - Camera.x;
 	}
 	
-	public static int offsetCameraY(int y) {
+	public static int offsetY(int y) {
 		return y - Camera.y;
 	}
 	

@@ -217,10 +217,10 @@ public class Player extends Entity{
 				
 				if(direction == right_dir) {
 					px = 5;
-					rad = Math.atan2(Game.getMouseY()  - (Camera.offsetCameraY(this.getY() + py)), Game.getMouseX() - (Camera.offsetCameraX(this.getX() + px)));
+					rad = Math.atan2(Game.getMouseY()  - (Camera.offsetY(this.getY() + py)), Game.getMouseX() - (Camera.offsetX(this.getX() + px)));
 				} else {
 					px = 7;
-					rad = Math.atan2(Game.getMouseY()  - (Camera.offsetCameraY(this.getY() + py)), Game.getMouseX() - (Camera.offsetCameraX(this.getX() + px)));
+					rad = Math.atan2(Game.getMouseY()  - (Camera.offsetY(this.getY() + py)), Game.getMouseX() - (Camera.offsetX(this.getX() + px)));
 				}
 				 
 				Projectile projectile = new Projectile(this.x + px, this.y + py, 3, 3, rad);
@@ -291,11 +291,11 @@ public class Player extends Entity{
 	
 	private double weaponAngle() {
 		
-		int thetaX = Game.getMouseX() - (Camera.offsetCameraX(this.getX()) - 5 + 8);
+		int thetaX = Game.getMouseX() - (Camera.offsetX(this.getX()) - 5 + 8);
 		if (direction == right_dir) {
-			thetaX = Game.getMouseX() - (Camera.offsetCameraX(this.getX()) + 5 + 8);
+			thetaX = Game.getMouseX() - (Camera.offsetX(this.getX()) + 5 + 8);
 		}
-		int thetaY = Game.getMouseY() - (Camera.offsetCameraX(this.getX()) + 2 + 8);
+		int thetaY = Game.getMouseY() - (Camera.offsetX(this.getX()) + 2 + 8);
 		double theta = Math.atan2(thetaY, thetaX);
 		return theta;
 		
@@ -317,45 +317,45 @@ public class Player extends Entity{
 	public void render(Graphics graphics) {
 		if(!isDamaged) {
 			if(direction == right_dir) {
-				graphics.drawImage(rightPlayer[imageIndex], Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(offsetZ(this.getY())), null);
+				graphics.drawImage(rightPlayer[imageIndex], Camera.offsetX(this.getX()), Camera.offsetY(offsetZ(this.getY())), null);
 				if(hasWeapon) {
 					//Graphics2D graphics2 = (Graphics2D) graphics;
 					//double theta = weaponAngle();
 					//graphics2.rotate(theta, Camera.offsetCameraX(this.getX()) + 5, Camera.offsetCameraY(offsetZ(this.getY())) + 2);
-					graphics.drawImage(bowRight, Camera.offsetCameraX(this.getX()) + 5, Camera.offsetCameraY(offsetZ(this.getY())) + 2, null);
+					graphics.drawImage(bowRight, Camera.offsetX(this.getX()) + 5, Camera.offsetY(offsetZ(this.getY())) + 2, null);
 					//graphics2.rotate(-theta, Camera.offsetCameraX(this.getX()) + 5, Camera.offsetCameraY(offsetZ(this.getY())) + 2);
 					
 				}
 			} else if(direction == left_dir) {
-				graphics.drawImage(leftPlayer[imageIndex], Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(offsetZ(this.getY())), null);
+				graphics.drawImage(leftPlayer[imageIndex], Camera.offsetX(this.getX()), Camera.offsetY(offsetZ(this.getY())), null);
 				if(hasWeapon) {
 					//Graphics2D graphics2 = (Graphics2D) graphics;
 					//double theta = weaponAngle();
 					//graphics2.rotate(-theta, Camera.offsetCameraX(this.getX() - 5), Camera.offsetCameraY(offsetZ(this.getY())) + 2);
-					graphics.drawImage(bowLeft, Camera.offsetCameraX(this.getX()) - 5, Camera.offsetCameraY(offsetZ(this.getY())) + 2, null);
+					graphics.drawImage(bowLeft, Camera.offsetX(this.getX()) - 5, Camera.offsetY(offsetZ(this.getY())) + 2, null);
 					//graphics2.rotate(theta, Camera.offsetCameraX(this.getX() - 5), Camera.offsetCameraY(offsetZ(this.getY())) + 2);
 				}
 			} 
 		} else {
 			if(direction == right_dir) {
-				graphics.drawImage(blankPlayerRight, Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(offsetZ(this.getY())), null);
+				graphics.drawImage(blankPlayerRight, Camera.offsetX(this.getX()), Camera.offsetY(offsetZ(this.getY())), null);
 				if(hasWeapon) {
 					//Graphics2D graphics2 = (Graphics2D) graphics;
-					graphics.drawImage(blankBowRight, Camera.offsetCameraX(this.getX()) + 5, Camera.offsetCameraY(offsetZ(this.getY())) + 2, null);
+					graphics.drawImage(blankBowRight, Camera.offsetX(this.getX()) + 5, Camera.offsetY(offsetZ(this.getY())) + 2, null);
 				}
 				
 			} else if(direction == left_dir) {
-				graphics.drawImage(blankPlayerLeft, Camera.offsetCameraX(this.getX()), Camera.offsetCameraY(offsetZ(this.getY())), null);
+				graphics.drawImage(blankPlayerLeft, Camera.offsetX(this.getX()), Camera.offsetY(offsetZ(this.getY())), null);
 				if(hasWeapon) {
 					//Graphics2D graphics2 = (Graphics2D) graphics;
-					graphics.drawImage(blankBowLeft, Camera.offsetCameraX(this.getX()) - 5, Camera.offsetCameraY(offsetZ(this.getY())) + 2, null);
+					graphics.drawImage(blankBowLeft, Camera.offsetX(this.getX()) - 5, Camera.offsetY(offsetZ(this.getY())) + 2, null);
 				}
 			} 
 		}
 		
 		if (isJumping) {
 			graphics.setColor(Color.black);
-			graphics.fillOval(Camera.offsetCameraX(this.getX()) + 4, Camera.offsetCameraY(this.getY()) + 8, 8, 8);
+			graphics.fillOval(Camera.offsetX(this.getX()) + 4, Camera.offsetY(this.getY()) + 8, 8, 8);
 		}
 	}
 }
