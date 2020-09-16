@@ -6,6 +6,7 @@ public class Apple extends Entity{
 
 	public Apple(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		this.depth = 0;
 		sprite = APPLE_EN;
 	}
 	

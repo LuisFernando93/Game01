@@ -15,6 +15,8 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -231,6 +233,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		graphics.fillRect(0, 0, WIDTH, HEIGHT);
 		
 		world.render(graphics);
+		Collections.sort(entities, Entity.entitySorter);
 		for (Entity entity : entities) {
 			entity.render(graphics);
 		}

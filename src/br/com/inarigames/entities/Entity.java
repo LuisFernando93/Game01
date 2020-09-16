@@ -3,6 +3,7 @@ package br.com.inarigames.entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Comparator;
 import java.util.List;
 
 import br.com.inarigames.main.Game;
@@ -23,6 +24,20 @@ public class Entity {
 	protected double x, y;
 	protected BufferedImage sprite;
 	private int maskx, masky, mwidth, mheight;
+	
+	protected int depth;
+	
+	public static Comparator<Entity> entitySorter = new Comparator<Entity>() {
+			
+			@Override
+			public int compare(Entity e0, Entity e1) {
+				if (e0.getDepth() < e1.getDepth())
+					return -1;
+				if (e0.getDepth() > e1.getDepth())
+					return +1;
+				return 0;
+			}
+		};
 	
 	public Entity(double x, double y, int width, int height) {
 		this.x = x;
@@ -51,6 +66,10 @@ public class Entity {
 	
 	public int getHeight() {
 		return this.height;
+	}
+	
+	public int getDepth() {
+		return this.depth;
 	}
 	
 	public void setX(int x) {

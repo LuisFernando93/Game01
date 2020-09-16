@@ -37,6 +37,7 @@ public class Enemy extends Entity{
 
 	public Enemy(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		this.depth = 0;
 		enemySprites = new BufferedImage[2];
 		enemySprites[0] = ENEMY_EN1; 
 		enemySprites[1] = ENEMY_EN2;

@@ -55,7 +55,7 @@ public class Player extends Entity{
 
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		
+		this.depth = 1;
 		rightPlayer = new BufferedImage[4];
 		leftPlayer = new BufferedImage[4];
 		
