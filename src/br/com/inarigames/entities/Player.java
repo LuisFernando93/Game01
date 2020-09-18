@@ -117,22 +117,21 @@ public class Player extends Entity{
 	}
 	
 	private void movePlayer() {
-		
 		moved = false;
-		if(right && World.isFree(this.getX()+speed, this.getY())) {
+		if(right && (this.x + speed + this.width <= World.getWidth()*World.TILE_SIZE) && World.isFree(this.getX()+speed, this.getY())) {
 			moved = true;
 			direction = right_dir;
 			x+=speed;
-		} else if(left && World.isFree(this.getX()-speed, this.getY())) {
+		} else if(left && (x - speed >= 0) && World.isFree(this.getX()-speed, this.getY())) {
 			moved = true;
 			direction = left_dir;
 			x-=speed;
 		}
 		
-		if(up && World.isFree(this.getX(), this.getY()-speed)) {
+		if(up && (y - speed >= 0) && World.isFree(this.getX(), this.getY()-speed)) {
 			moved = true;
 			y-=speed;
-		} else if(down && World.isFree(this.getX(), this.getY()+speed)) {
+		} else if(down && (this.y + speed + this.height <= World.getHeight()*World.TILE_SIZE) && World.isFree(this.getX(), this.getY()+speed)) {
 			moved = true;
 			y+=speed;
 		}
@@ -283,8 +282,8 @@ public class Player extends Entity{
 	}
 	
 	private void updateCamera() {
-		int cameraX = Camera.clamp(this.getX() - (Game.WIDTH)/2, 0, World.WIDTH*16 - Game.WIDTH);
-		int cameraY = Camera.clamp(this.getY() - (Game.HEIGHT)/2, 0, World.HEIGHT*16 - Game.HEIGHT);
+		int cameraX = Camera.clamp(this.getX() - (Game.WIDTH)/2, 0, World.getWidth()*16 - Game.WIDTH);
+		int cameraY = Camera.clamp(this.getY() - (Game.HEIGHT)/2, 0, World.getHeight()*16 - Game.HEIGHT);
 		Camera.setX(cameraX);
 		Camera.setY(cameraY);
 	}

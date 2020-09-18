@@ -73,7 +73,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public Game() {
 		
-		//Sound.musicBackground.loop();
+		Sound.musicBackground.loop();
 		random = new Random();
 		addKeyListener(this);
 		addMouseListener(this);
@@ -97,7 +97,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		player = new Player(0, 0, 16, 16);
 		entities.add(player);
 		
-		world = new World("/level1.png");
+		world = new World("/level" + level + ".png");
 		
 	}
 	

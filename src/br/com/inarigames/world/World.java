@@ -19,11 +19,33 @@ import br.com.inarigames.main.Game;
 public class World {
 	
 	private static Tile[][] tiles;
-	public static int WIDTH, HEIGHT;
+	private static int WIDTH, HEIGHT;
 	public final static int TILE_SIZE = 16;
 	
 
 	public World(String path) {
+		
+		if (path != null) {
+			createWorld(path);
+		} else {
+			createRandomWorld();
+		}
+		
+	}
+	
+	public static Tile[][] getTiles() {
+		return World.tiles;
+	}
+	
+	public static int getWidth() {
+		return World.WIDTH;
+	}
+	
+	public static int getHeight() {
+		return World.HEIGHT;
+	}
+ 	
+	public void createWorld(String path) {
 		try {
 			
 			BufferedImage map = ImageIO.read(getClass().getResource(path));
@@ -89,10 +111,63 @@ public class World {
 		}
 	}
 	
-	public static Tile[][] getTiles() {
-		return World.tiles;
+	public void createRandomWorld() {
+		
+		World.HEIGHT = 100;
+		World.WIDTH = 100;
+		Game.player.setX(0);
+		Game.player.setY(0);
+		tiles = new Tile[WIDTH][HEIGHT];
+		for (int i = 0; i < WIDTH; i++) {
+			for (int j = 0; j < HEIGHT; j++) {
+				tiles[i][j] = new WallTile(TILE_SIZE*i, TILE_SIZE*j, Tile.TILE_WALL);
+			}
+		}
+		
+		int dir = 0;
+		int i = 0, j = 0;
+		
+		for (int k = 0; k < 200; k++) {
+			
+			tiles[i][j] = new FloorTile(TILE_SIZE*i, TILE_SIZE*j, Tile.TILE_FLOOR);
+			switch (dir) {
+			
+			case 0:
+				//direita
+				if (i < World.WIDTH) {
+					i++;
+				}
+				break;
+			
+			case 1: 
+				//esquerda
+				if (i > 0) {
+					i--;
+				}
+				break;
+				
+			case 2:
+				//baixo
+				if (j < World.HEIGHT) {
+					j++;
+				}
+				break;
+			
+			case 3:
+				//cima
+				if (j > 0) {
+					j--;
+				}
+				break;
+			}
+			
+			if(Game.random.nextInt(100) < 50) {
+				dir = Game.random.nextInt(4);
+			}
+			
+		}
 	}
- 	
+	
 	public static void newWorld(String world) {
 		Game.entities = new ArrayList<Entity>();
 		Game.enemies = new ArrayList<Enemy>();

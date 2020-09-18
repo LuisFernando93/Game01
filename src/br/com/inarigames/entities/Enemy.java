@@ -162,30 +162,6 @@ public class Enemy extends Entity{
 		}
 	}
 	
-	private void move() {
-		if(!isCollidingWithPlayer()) {
-			if(Game.random.nextInt(100) < moveChance) {
-				
-				if (this.x < Game.player.getX() && World.isFree(this.getX()+speed, this.getY()) 
-						&& !isColliding(this.getX()+speed, this.getY())) {
-					x+=speed;
-				} else if (this.x > Game.player.getX() && World.isFree(this.getX()-speed, this.getY()) 
-						&& !isColliding(this.getX()-speed, this.getY())) {
-					x-=speed;
-				}
-				
-				if (this.y < Game.player.getY() && World.isFree(this.getX(), this.getY()+speed) 
-						&& !isColliding(this.getX(), this.getY()+speed)) {
-					y+=speed;
-				} else if (this.y > Game.player.getY() && World.isFree(this.getX(), this.getY()-speed) 
-						&& !isColliding(this.getX(), this.getY()-speed)) {
-					y-=speed;
-				}
-				
-			}
-		}
-	}
-	
 	private void checkIfIsDamaged() {
 		if (isCollidingWithProjectile()) {
 			isDamaged = true;
@@ -219,7 +195,6 @@ public class Enemy extends Entity{
 		} else {
 			graphics.drawImage(damagedEnemySprite, Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
 		}
-//		graphics.setColor(Color.BLUE);
-//		graphics.fillRect(Camera.offsetX(this.getX() + maskx), Camera.offsetY(this.getY() + masky), maskw, maskh);
+		
 	}
 }
