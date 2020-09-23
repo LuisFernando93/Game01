@@ -178,6 +178,27 @@ public class World {
 		return;
 	}
 	
+	public static boolean isFreeDynamic(int xnext, int ynext, int width, int height) {
+		int x1 = xnext / TILE_SIZE;
+		int y1 = ynext / TILE_SIZE;
+		
+		int x2 = (xnext+width-1) / TILE_SIZE;
+		int y2 = ynext / TILE_SIZE;
+		
+		int x3 = xnext / TILE_SIZE;
+		int y3 = (ynext+height-1) / TILE_SIZE;
+		
+		int x4 = (xnext+width-1) / TILE_SIZE;
+		int y4 = (ynext+height-1) / TILE_SIZE;
+		
+		boolean isFree = !(tiles[x1][y1] instanceof WallTile || 
+						tiles[x2][y2] instanceof WallTile || 
+						tiles[x3][y3] instanceof WallTile || 
+						tiles[x4][y4] instanceof WallTile);
+		
+		return isFree;
+	}
+	
 	public static boolean isFree(int xnext, int ynext) {
 		int x1 = xnext / TILE_SIZE;
 		int y1 = ynext / TILE_SIZE;

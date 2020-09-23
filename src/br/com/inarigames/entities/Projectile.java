@@ -31,8 +31,15 @@ public class Projectile extends Entity{
 		
 		this.dx = Math.cos(rad);
 		this.dy = Math.sin(rad);
-		this.x += dx*speed;
-		this.y += dy*speed;
+		
+		if (World.isFreeDynamic((int)(this.x+(dx*speed)), (int)(this.y+(dy*speed)), width, height)) {
+			this.x += dx*speed;
+			this.y += dy*speed;
+		} else {
+			Game.toRemove.add(this);
+			return;
+		}
+		
 
 		flyTime++;
 		if(this.flyTime == MAX_FLY_TIME) {

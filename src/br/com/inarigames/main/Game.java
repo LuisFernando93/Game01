@@ -15,7 +15,6 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -30,11 +29,14 @@ import br.com.inarigames.graphics.Spritesheet;
 import br.com.inarigames.graphics.UI;
 import br.com.inarigames.system.Light;
 import br.com.inarigames.system.Sound;
-import br.com.inarigames.world.Camera;
 import br.com.inarigames.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static JFrame frame;
 	private Thread thread;
 	private boolean isRunning = false;
@@ -55,7 +57,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static List<Entity> entities;
 	public static List<Enemy> enemies;
 	public static List<Projectile> projectiles;
-	public static List<Entity> toRemove = new ArrayList();
+	public static List<Entity> toRemove = new ArrayList<Entity>();
 	public static Spritesheet spritesheet =  new Spritesheet("/spritesheet.png");
 	
 	public static Random random;

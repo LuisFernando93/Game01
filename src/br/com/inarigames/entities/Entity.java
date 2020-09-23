@@ -16,9 +16,12 @@ public class Entity {
 	protected static BufferedImage APPLE_EN = Game.spritesheet.getSprite(6*16, 0, 16, 16);
 	protected static BufferedImage WEAPON_EN = Game.spritesheet.getSprite(7*16, 0, 16, 16);
 	protected static BufferedImage AMMO_EN = Game.spritesheet.getSprite(6*16, 16, 16, 16);
-	protected static BufferedImage ENEMY_EN1 = Game.spritesheet.getSprite(7*16, 16, 16, 16);
-	protected static BufferedImage ENEMY_EN2 = Game.spritesheet.getSprite(8*16, 16, 16, 16);
-	protected static BufferedImage BLANK_ENEMY_EN = Game.spritesheet.getSprite(9*16, 16, 16, 16);
+	protected static BufferedImage ENEMY_EN1_RIGHT = Game.spritesheet.getSprite(7*16, 16, 16, 16);
+	protected static BufferedImage ENEMY_EN2_RIGHT = Game.spritesheet.getSprite(8*16, 16, 16, 16);
+	protected static BufferedImage BLANK_ENEMY_EN_RIGHT = Game.spritesheet.getSprite(9*16, 16, 16, 16);
+	protected static BufferedImage ENEMY_EN1_LEFT = Game.spritesheet.getSprite(7*16, 2*16, 16, 16);
+	protected static BufferedImage ENEMY_EN2_LEFT = Game.spritesheet.getSprite(8*16, 2*16, 16, 16);
+	protected static BufferedImage BLANK_ENEMY_EN_LEFT = Game.spritesheet.getSprite(9*16, 2*16, 16, 16);
 	
 	protected int z, width, height;
 	protected double x, y;

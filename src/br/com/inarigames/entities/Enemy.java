@@ -1,6 +1,5 @@
 package br.com.inarigames.entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -25,11 +24,17 @@ public class Enemy extends Entity{
 	private int damageFrames = 0;
 	private int maxDamageFrames = 8;
 	
+	private int right_dir = 0;
+	private int left_dir = 1;
+	private int direction = Game.random.nextInt(1);
+	
 	private int frames = 0, maxFrames = 20, imageIndex = 0, maxIndex = 1;
 	private int maskx = 5, masky = 5, maskw = 10, maskh = 10;
 	
-	private BufferedImage[] enemySprites;
-	private BufferedImage damagedEnemySprite;
+	private BufferedImage[] enemySpritesRight;
+	private BufferedImage damagedEnemySpriteRight;
+	private BufferedImage[] enemySpritesLeft;
+	private BufferedImage damagedEnemySpriteLeft;
 	
 	private boolean isDamaged = false;
 	
@@ -38,10 +43,14 @@ public class Enemy extends Entity{
 	public Enemy(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.depth = 0;
-		enemySprites = new BufferedImage[2];
-		enemySprites[0] = ENEMY_EN1; 
-		enemySprites[1] = ENEMY_EN2;
-		damagedEnemySprite = BLANK_ENEMY_EN;
+		enemySpritesRight = new BufferedImage[2];
+		enemySpritesRight[0] = ENEMY_EN1_RIGHT; 
+		enemySpritesRight[1] = ENEMY_EN2_RIGHT;
+		damagedEnemySpriteRight = BLANK_ENEMY_EN_RIGHT;
+		enemySpritesLeft = new BufferedImage[2];
+		enemySpritesLeft[0] = ENEMY_EN1_LEFT; 
+		enemySpritesLeft[1] = ENEMY_EN2_LEFT;
+		damagedEnemySpriteLeft = BLANK_ENEMY_EN_LEFT;
 	}
 	
 	public boolean isColliding(int xnext, int ynext) {
@@ -87,8 +96,10 @@ public class Enemy extends Entity{
 			if (path.size() > 0) {
 				Vector2i target = path.get(path.size() - 1).getTile();
 				if (this.x < target.getX() * World.TILE_SIZE) {
+					direction = right_dir;
 					this.x += speed;
 				} else if (this.x > target.getX() * World.TILE_SIZE) {
+					direction = left_dir;
 					this.x -= speed;
 				}
 				
@@ -190,10 +201,18 @@ public class Enemy extends Entity{
 	
 	public void render(Graphics graphics) {
 		
-		if (!isDamaged) {
-			graphics.drawImage(enemySprites[imageIndex], Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
-		} else {
-			graphics.drawImage(damagedEnemySprite, Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
+		if (direction == right_dir) {
+			if (!isDamaged) {
+				graphics.drawImage(enemySpritesRight[imageIndex], Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
+			} else {
+				graphics.drawImage(damagedEnemySpriteRight, Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
+			}
+		} else if (direction == left_dir) {
+			if (!isDamaged) {
+				graphics.drawImage(enemySpritesLeft[imageIndex], Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
+			} else {
+				graphics.drawImage(damagedEnemySpriteLeft, Camera.offsetX(this.getX()), Camera.offsetY(this.getY()), null);
+			}
 		}
 		
 	}
